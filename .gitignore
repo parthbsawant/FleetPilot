@@ -1,0 +1,13 @@
+# Dependencies downloaded by npm (huge, re-creatable)
+node_modules/
+
+# Secrets and local settings
+.env
+
+# Logs and OS junk
+*.log
+.DS_Store
+Thumbs.db
+
+# Test coverage output
+coverage/
