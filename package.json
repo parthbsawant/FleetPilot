@@ -1,0 +1,25 @@
+{
+  "name": "fleetpilot",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "node --watch backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/parthbsawant/FleetPilot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/parthbsawant/FleetPilot/issues"
+  },
+  "homepage": "https://github.com/parthbsawant/FleetPilot#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
