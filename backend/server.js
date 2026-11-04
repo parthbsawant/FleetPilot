@@ -1,5 +1,5 @@
 import express from 'express';
-
+import { config } from './config.js';
 const app = express();
 
 app.get('/', (req, res) => {
@@ -21,6 +21,6 @@ app.get('/api/missing', (req, res) => {
     }));
 });
 
-app.listen(3000, () => {
-    console.log("Server running at http://localhost:3000");
+app.listen(config.port, () => {
+    console.log(`FleetPilot running at http://localhost:${config.port} (${config.env})`);
 });
