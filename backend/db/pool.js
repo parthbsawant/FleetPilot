@@ -2,7 +2,7 @@
 //connection pool which can be imported wherever database access is required
 
 import pg from 'pg';
-import {config} from '..config.js';
+import {config, isProduction} from '../config.js';
 
 const { Pool } = pg;
 
@@ -12,5 +12,5 @@ export const pool = new Pool({
 });
 
 pool.on('error', (err) => {
-    console.log('Unexpected database error', err.message);
+    console.error('Unexpected database error', err.message);
 });
