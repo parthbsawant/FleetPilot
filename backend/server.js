@@ -20,10 +20,9 @@ app.use((req, res, next) => {
 //Middleware 2 : Convert JSON request bodies into req.body
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send("Hello from Fleetpilot!!");
-});
-
+// app.get('/', (req, res) => {
+//     res.send("Hello from Fleetpilot!!");
+// });
 
 app.get('/api/hello', (req, res) => {
     res.json({data : {message: 'Hello from the API', time: new Date()}});
@@ -66,10 +65,14 @@ app.get('/api/health', async (req, res) => {
     });
 });
 
+// Unknown /api/... URLs get a JSON 404.
+app.use('/api', notFound);
 
-// No route matched: send a 404.
+// Serve frontend files.
+app.use(express.static('frontend'));
+
+// No file matched either: 404.
 app.use(notFound);
-
 
 // Error handler: must be last.
 app.use(errorHandler);
@@ -88,3 +91,10 @@ app.listen(config.port, () => {
 // unmatched routes, while errorHandler handles errors and sends 
 // consistent JSON responses. The error handler must remain last.
 
+// What we are doing: We are telling Express to handle unknown 
+// API URLs first and return JSON 404 responses. Next, 
+// express.static('frontend') allows Express to serve files such 
+// as index.html from the frontend folder. If no matching frontend 
+// file exists either, the second notFound middleware returns a 404. 
+// This ordering ensures API requests receive JSON errors 
+// instead of accidentally receiving the frontend page.

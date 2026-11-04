@@ -1,0 +1,75 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FleetPilot Analytics</title>
+
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: #F5F3EF;
+            color: #202833;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: #fff;
+            padding: 32px 40px;
+            border-radius: 16px;
+            border-top: 6px solid #F77138;
+            min-width: 320px;
+        }
+
+        .ok {
+            color: #37A59A;
+            font-weight: 600;
+        }
+
+        .bad {
+            color: #C0392B;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="card">
+        <h1>FleetPilot Analytics</h1>
+        <p>Server: <span id="status">checking...</span></p>
+    </main>
+
+    <script type="module">
+        const statusEl = document.getElementById('status');
+
+        try {
+            const response = await fetch('/api/health');
+            const body = await response.json();
+
+            if (response.ok) {
+                const time = new Date(body.data.databaseTime).toLocaleString('en-IN');
+                statusEl.textContent = `OK, database connected (${time})`;
+                statusEl.className = 'ok';
+            } else {
+                statusEl.textContent = body.error.message;
+                statusEl.className = 'bad';
+            }
+        } catch {
+            statusEl.textContent = 'Cannot reach the server';
+            statusEl.className = 'bad';
+        }
+    </script>
+</body>
+</html>
+
+
+<!-- What we are doing: We are creating a basic frontend webpage 
+for FleetPilot. It contains a dashboard-style card that displays 
+the server's health status. When the page loads, JavaScript sends 
+a request to /api/health, reads the JSON response, and displays 
+whether the database is connected. If the request fails, it displays 
+an error message instead. -->
