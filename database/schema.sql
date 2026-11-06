@@ -26,12 +26,12 @@ CREATE TABLE vehicles (
 
     CONSTRAINT registration_is_clean
         CHECK (
-            registration_number = upper(replace(registration_number, ' ', ''))
+            registration_number = upper(replace(registration_number, ' ', '')) -- > Checks the number entered by Converting the number entered into UPPER Case & Then Replacing the whitespaces from the number entered --> with no space
             AND length(registration_number) BETWEEN 4 AND 15
         ),
 
     CONSTRAINT name_model_not_blank
-        CHECK (length(trim(name_model)) > 0),
+        CHECK (length(trim(name_model)) > 0), -- > trim() removes the spaces from start and end
 
     CONSTRAINT valid_vehicle_type
         CHECK (
@@ -45,7 +45,6 @@ CREATE TABLE vehicles (
 
     CONSTRAINT initial_odometer_not_negative
         CHECK (initial_odometer_km >= 0)
-
 );
 
 
@@ -70,7 +69,7 @@ CREATE TABLE trips (
     end_odometer_km INTEGER,
 
     distance_km INTEGER GENERATED ALWAYS AS
-        (end_odometer_km - start_odometer_km) STORED,
+        (end_odometer_km - start_odometer_km) STORED, -- > used generated column
 
     notes TEXT,
 
@@ -120,20 +119,12 @@ CREATE TABLE trips (
 
 -- TRIPS INDEXES
 
--- Allow only one in-progress trip per vehicle.
-
 CREATE UNIQUE INDEX one_in_progress_trip_per_vehicle
     ON trips (vehicle_id)
     WHERE status = 'in_progress';
 
-
--- Improve searches based on vehicle ID.
-
 CREATE INDEX trips_vehicle_id_idx
     ON trips (vehicle_id);
-
-
--- Improve searches based on trip end time.
 
 CREATE INDEX trips_end_at_idx
     ON trips (end_at);
