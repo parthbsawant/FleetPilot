@@ -111,7 +111,29 @@ export function validateVehicle(body, { isNew }){
             values.acquired_on = date;
         }
     }
+}
 
+export function validateVehicleQuery(query){
+    const errors = {};
+    const filters = {};
 
+    if (query.status) {
+        if (!VEHICLE_STATUSES.includes(query.status)) {
+            errors.status = 'Unknown status';
+        } else {
+            filters.status = query.status;
+        }
+    }
 
+    if(query.type){
+        if(!VEHICLE_TYPES.includes(query.type)){
+            errors.type = 'Unknown vehicle type';
+        } else {
+            filters.type = query.type;
+        }
+    }
+
+    if(query.search && String(query.search).trim() !== ''){
+        filters.search = String(query.search).trim();
+    }
 }
