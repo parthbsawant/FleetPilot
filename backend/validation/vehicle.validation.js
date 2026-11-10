@@ -50,7 +50,7 @@ export function validateVehicle(body, { isNew }){
 
     const has = (field) => input[field] !== undefined;
 
-    // registration_number: required; stored in capitals without spaces
+    // registration_number check
     if (has('registration_number') || isNew) {
         const reg = String(input.registration_number ?? '')
             .toUpperCase()
@@ -65,6 +65,7 @@ export function validateVehicle(body, { isNew }){
         }
     }
 
+    //vehicle name model check
     if(has('name_model') || isNew){
         const name = String(input.name_model ?? '').trim();
 
@@ -76,5 +77,41 @@ export function validateVehicle(body, { isNew }){
             values.name_model = name;
         }
     }
+    //vehicle type check (should be between the predefined list)
+    if(has('vehicle_type') || isNew){
+        if(!VEHICLE_TYPES.includes(input.vehicle_type)){
+            errors.vehicle_type = 'Choose a vehicle type';
+        } else{
+            values.vehicle_type= input.vehicle_type;
+        }
+    }
+
+    //check and validate the odometer reading
+    if(has('inital_odometer_km') && input.initial_odometer_km !== ''){
+        const km = Number(input.initial_odometer_km);
+
+        if(!Number.isInteger(km) || km < 0 || km > 9999999){
+            errors.initial_odometer_km = 'Enter whole kilometres, 0 or more';
+        } else {
+            values.initial_odometer_km = km;
+        }
+    }
+
+    //check the date of acquiring
+    if(has('aquired_on')) {
+        const date = input.acquired_on;
+
+        if(date === null || date === ''){
+            values.acquired_on = null;
+        } else if(typeof date !== 'string' || !isRealDate(date)){
+            errors.acquired_on = 'Use a real date (YYYY-MM-DD)';
+        } else if (date > todayInIndia()) {
+            errors.acquired_on = 'Cannot be in the future';
+        } else {
+            values.acquired_on = date;
+        }
+    }
+
+
 
 }
