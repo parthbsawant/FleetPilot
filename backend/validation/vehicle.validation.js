@@ -43,3 +43,38 @@ function todayInIndia(){
     }).format(new Date());
 }
 
+export function validateVehicle(body, { isNew }){
+    const input = body ?? {};
+    const values = {};
+    const errors = {};
+
+    const has = (field) => input[field] !== undefined;
+
+    // registration_number: required; stored in capitals without spaces
+    if (has('registration_number') || isNew) {
+        const reg = String(input.registration_number ?? '')
+            .toUpperCase()
+            .replace(/\s+/g, '');
+
+        if (reg === '') {
+            errors.registration_number = 'Registration number is required';
+        } else if (!/^[A-Z0-9]{4,15}$/.test(reg)) {
+            errors.registration_number = 'Use 4 to 15 letters and digits only';
+        } else {
+            values.registration_number = reg;
+        }
+    }
+
+    if(has('name_model') || isNew){
+        const name = String(input.name_model ?? '').trim();
+
+        if(name === ''){
+            errors.name_model = 'Name / model is required';
+        } else if (name.length > 100){
+            errors.name_model = 'Keep it under 100 characters';
+        } else{
+            values.name_model = name;
+        }
+    }
+
+}
