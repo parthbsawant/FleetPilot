@@ -4,10 +4,10 @@
 
 import express from 'express';
 import { healthRouter } from './routes/health.routes.js';
+import { vehiclesRouter } from './routes/vehicles.routes.js';
 import { notFound, errorHandler } from './middleware/errors.js';
 
 export const app = express();
-
 
 // 1. Print every request in the terminal.
 app.use((req, res, next) => {
@@ -15,10 +15,11 @@ app.use((req, res, next) => {
     next();
 });
 
-
 // 2. Turn JSON request bodies into req.body.
 app.use(express.json());
 
+app.use('/api/health', healthRouter);
+app.use('api/vehicles', vehicleRouter);
 
 // 3. API routes (more are added in later steps).
 app.use('/api/health', healthRouter);
@@ -46,3 +47,4 @@ app.use(errorHandler);
 // 404 handling, and the error handler. Notice that we mount healthRouter at 
 // /api/health; since its internal route is /, the complete endpoint remains 
 // /api/health. This file configures the application but does not start the server.
+
