@@ -5,7 +5,7 @@ export const VEHICLE_TYPES = [
     'coach',
     'minibus',
     'van',
-    'others'
+    'other'
 ];
 
 export const VEHICLE_STATUSES = [
@@ -15,11 +15,11 @@ export const VEHICLE_STATUSES = [
 ];
 
 //parser for the req.params and req.query
-export function parseID(text) {
+export function parseId(text) {
     const id = Number(text);
 
     if(!Number.isInteger(id) || id < 1){
-        throw createError(400, 'INVALID_ID', `${text} is not a valid id`);
+        throw createError(400, 'INVALID_ID', `"${text}" is not a valid id`);
     }
 
     return id;
@@ -27,7 +27,7 @@ export function parseID(text) {
 
 //helper function for checking the date format & if the date is valid (not exported)
 function isRealDate(text){
-    if(!/^\d{4}-\d{2}-\{2}$/.test(text)){
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) {
         return false;
     }
 
@@ -86,8 +86,17 @@ export function validateVehicle(body, { isNew }){
         }
     }
 
+    // status: optional to create and database default = 'active'
+    if (has('status')) {
+        if (!VEHICLE_STATUSES.includes(input.status)) {
+            errors.status = 'Choose a valid status';
+        } else {
+            values.status = input.status;
+        }
+    }
+
     //check and validate the odometer reading
-    if(has('inital_odometer_km') && input.initial_odometer_km !== ''){
+    if (has('initial_odometer_km') && input.initial_odometer_km !== ''){
         const km = Number(input.initial_odometer_km);
 
         if(!Number.isInteger(km) || km < 0 || km > 9999999){
@@ -98,7 +107,7 @@ export function validateVehicle(body, { isNew }){
     }
 
     //check the date of acquiring
-    if(has('aquired_on')) {
+    if(has('acquired_on')) {
         const date = input.acquired_on;
 
         if(date === null || date === ''){
@@ -111,6 +120,16 @@ export function validateVehicle(body, { isNew }){
             values.acquired_on = date;
         }
     }
+
+    if (!isNew && Object.keys(values).length === 0 && Object.keys(errors).length === 0) {
+        throw createError(400, 'NOTHING_TO_UPDATE', 'Send at least one field to change');
+    }
+
+    if (Object.keys(errors).length > 0) {
+        throw createError(400, 'VALIDATION_ERROR', 'Some fields need fixing', errors);
+    }
+
+    return values;
 }
 
 export function validateVehicleQuery(query){
@@ -136,4 +155,21 @@ export function validateVehicleQuery(query){
     if(query.search && String(query.search).trim() !== ''){
         filters.search = String(query.search).trim();
     }
+
+    const page = Number(query.page ?? 1);
+    const limit = Number(query.limit ?? 20);
+
+    if(!Number.isInteger(page) || page < 1){
+        errors.page = 'Page must be 1 or more';
+    }
+
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+        errors.limit = 'Limit must be between 1 and 100';
+    }
+
+    if (Object.keys(errors).length > 0) {
+        throw createError(400, 'VALIDATION_ERROR', 'Invalid filters', errors);
+    }
+
+    return { filters, page, limit };
 }
