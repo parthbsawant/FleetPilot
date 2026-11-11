@@ -18,12 +18,9 @@ app.use((req, res, next) => {
 // 2. Turn JSON request bodies into req.body.
 app.use(express.json());
 
-app.use('/api/health', healthRouter);
-app.use('api/vehicles', vehicleRouter);
-
 // 3. API routes (more are added in later steps).
 app.use('/api/health', healthRouter);
-
+app.use('/api/vehicles', vehiclesRouter);
 
 // 4. Unknown /api/... URLs get a JSON 404.
 app.use('/api', notFound);

@@ -85,3 +85,61 @@ export async function getVehicle(id) {
   return result.rows[0];
 }
 
+// Convert duplicate registration errors into a clear 409 response.
+function explainDatabaseError(err, values) {
+    if (
+        err.code === '23505' &&
+        err.constraint === 'vehicles_registration_number_key'
+    ) {
+        return createError(
+            409,
+            'DUPLICATE_REGISTRATION',
+            `A vehicle with registration ${values.registration_number} already exists`,
+            {
+                registration_number: 'Already used by another vehicle'
+            }
+        );
+    }
+
+    return err;
+}
+
+// Columns that the application is allowed to insert or update.
+const EDITABLE_COLUMNS = [
+    'registration_number',
+    'name_model',
+    'vehicle_type',
+    'status',
+    'initial_odometer_km',
+    'acquired_on'
+];
+
+// Add a new vehicle. The values have already been validated.
+export async function createVehicle(values) {
+    const columns = EDITABLE_COLUMNS.filter(
+        (column) => values[column] !== undefined
+    );
+
+    const placeholders = columns.map(
+        (column, index) => `$${index + 1}`
+    );
+
+    const params = columns.map(
+        (column) => values[column]
+    );
+
+    let result;
+
+    try {
+        result = await pool.query(
+            `INSERT INTO vehicles (${columns.join(', ')})
+             VALUES (${placeholders.join(', ')})
+             RETURNING id`,
+            params
+        );
+    } catch (err) {
+        throw explainDatabaseError(err, values);
+    }
+
+    return getVehicle(result.rows[0].id);
+}
