@@ -94,7 +94,7 @@ function explainDatabaseError(err, values) {
         return createError(
             409,
             'DUPLICATE_REGISTRATION',
-            `A vehicle with registration ${values.registration_number} already exists`,
+            `A vehicle with registration number ${values.registration_number} already exists`,
             {
                 registration_number: 'Already used by another vehicle'
             }
