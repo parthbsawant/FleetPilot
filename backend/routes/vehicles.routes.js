@@ -69,3 +69,13 @@ vehiclesRouter.patch('/:id', async(req, res) => {
         data: vehicle
     });
 });
+
+vehiclesRouter.delete('/:id', async(req,res) => {
+    const id = parseId(req.params.id);
+
+    await vehicles.deleteVehicle(id);
+
+    res.json({
+        data: {id, deleted: true}
+    });
+});
