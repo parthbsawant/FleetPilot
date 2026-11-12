@@ -143,3 +143,44 @@ export async function createVehicle(values) {
 
     return getVehicle(result.rows[0].id);
 }
+
+// Update selected fields of an existing vehicle.
+export async function updateVehicle(id, values) {
+    const columns = EDITABLE_COLUMNS.filter(
+        (column) => values[column] !== undefined
+    );
+
+    const assignments = columns.map(
+        (column, index) => `${column} = $${index + 1}`
+    );
+
+    const params = columns.map(
+        (column) => values[column]
+    );
+
+    params.push(id);
+
+    let result;
+
+    try {
+        result = await pool.query(
+            `UPDATE vehicles
+             SET ${assignments.join(', ')}, updated_at = now()
+             WHERE id = $${params.length}
+             RETURNING id`,
+            params
+        );
+    } catch (err) {
+        throw explainDatabaseError(err, values);
+    }
+
+    if (result.rows.length === 0) {
+        throw createError(
+            404,
+            'VEHICLE_NOT_FOUND',
+            `Vehicle ${id} not found`
+        );
+    }
+
+    return getVehicle(id);
+}

@@ -57,3 +57,15 @@ vehiclesRouter.post('/', async (req, res) => {
         data: vehicle
     });
 });
+
+vehiclesRouter.patch('/:id', async(req, res) => {
+    const id = parseId(req.params.id);
+
+    const values = validateVehicle(req.body, { isNew: false });
+
+    const vehicle = await vehicles.updateVehicle(id, values);
+
+    res.json({
+        data: vehicle
+    });
+});
