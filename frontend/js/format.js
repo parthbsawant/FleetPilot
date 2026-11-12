@@ -1,0 +1,49 @@
+
+// Turns raw API values into what people should read.
+
+const numberFormat = new Intl.NumberFormat('en-IN');
+
+const MONTHS = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+];
+
+// 57119 -> "57,119 km"
+export function formatKm(km) {
+    return km === null || km === undefined
+        ? '—'
+        : `${numberFormat.format(km)} km`;
+}
+
+// "2021-06-15" -> "15 Jun 2021"
+export function formatDate(text) {
+    if (!text) return '—';
+
+    const [year, month, day] = text.split('-');
+
+    return `${Number(day)} ${MONTHS[Number(month) - 1]} ${year}`;
+}
+
+export const TYPE_LABELS = {
+    bus: 'Bus',
+    coach: 'Coach',
+    minibus: 'Minibus',
+    van: 'Van',
+    other: 'Other'
+};
+
+export const STATUS_LABELS = {
+    active: 'Active',
+    in_maintenance: 'In maintenance',
+    inactive: 'Inactive'
+};
+
+// Makes text safe to put inside HTML.
+export function escapeHtml(value) {
+    return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+}
