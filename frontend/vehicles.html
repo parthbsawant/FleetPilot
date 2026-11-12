@@ -1,0 +1,226 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vehicles · FleetPilot</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">Fleet<span>Pilot</span></div>
+
+            <nav class="nav">
+                <a href="/">Dashboard</a>
+                <a href="/vehicles.html" class="active">Vehicles</a>
+                <span class="soon">Trips <small>soon</small></span>
+                <span class="soon">Expenses <small>soon</small></span>
+                <span class="soon">Maintenance <small>soon</small></span>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="page-header">
+                <h1>Vehicles</h1>
+                <button class="btn btn-primary" id="add-button">
+                    + Add vehicle
+                </button>
+            </div>
+
+            <div id="notice" class="notice hidden"></div>
+
+            <div class="toolbar">
+                <input
+                    id="search"
+                    type="search"
+                    placeholder="Search registration or model"
+                >
+
+                <select id="status-filter">
+                    <option value="">All statuses</option>
+                    <option value="active">Active</option>
+                    <option value="in_maintenance">In maintenance</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+
+                <select id="type-filter">
+                    <option value="">All types</option>
+                    <option value="bus">Bus</option>
+                    <option value="coach">Coach</option>
+                    <option value="minibus">Minibus</option>
+                    <option value="van">Van</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="card table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Registration</th>
+                            <th>Name / model</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th class="num">Odometer</th>
+                            <th>Acquired</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="vehicle-rows"></tbody>
+                </table>
+            </div>
+
+            <div class="pager">
+                <span id="pager-text"></span>
+
+                <span>
+                    <button class="btn btn-small" id="prev-page">
+                        ‹ Previous
+                    </button>
+
+                    <button class="btn btn-small" id="next-page">
+                        Next ›
+                    </button>
+                </span>
+            </div>
+        </main>
+    </div>
+
+    <dialog id="vehicle-dialog">
+        <form id="vehicle-form" class="dialog-body" novalidate>
+            <h2 id="dialog-title">Add vehicle</h2>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="registration_number">
+                        Registration number
+                    </label>
+
+                    <input
+                        id="registration_number"
+                        name="registration_number"
+                        placeholder="MH12FP0007"
+                    >
+
+                    <span
+                        class="error"
+                        data-error-for="registration_number"
+                    ></span>
+                </div>
+
+                <div class="field">
+                    <label for="name_model">Name / model</label>
+
+                    <input
+                        id="name_model"
+                        name="name_model"
+                        placeholder="Tata Starbus 41"
+                    >
+
+                    <span
+                        class="error"
+                        data-error-for="name_model"
+                    ></span>
+                </div>
+
+                <div class="field">
+                    <label for="vehicle_type">Type</label>
+
+                    <select id="vehicle_type" name="vehicle_type">
+                        <option value="">Choose…</option>
+                        <option value="bus">Bus</option>
+                        <option value="coach">Coach</option>
+                        <option value="minibus">Minibus</option>
+                        <option value="van">Van</option>
+                        <option value="other">Other</option>
+                    </select>
+
+                    <span
+                        class="error"
+                        data-error-for="vehicle_type"
+                    ></span>
+                </div>
+
+                <div class="field">
+                    <label for="status">Status</label>
+
+                    <select id="status" name="status">
+                        <option value="active">Active</option>
+                        <option value="in_maintenance">In maintenance</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+
+                    <span
+                        class="error"
+                        data-error-for="status"
+                    ></span>
+                </div>
+
+                <div class="field">
+                    <label for="initial_odometer_km">
+                        Initial odometer (km)
+                    </label>
+
+                    <input
+                        id="initial_odometer_km"
+                        name="initial_odometer_km"
+                        type="number"
+                        min="0"
+                        step="1"
+                        placeholder="0"
+                    >
+
+                    <span
+                        class="error"
+                        data-error-for="initial_odometer_km"
+                    ></span>
+                </div>
+
+                <div class="field">
+                    <label for="acquired_on">Acquired on</label>
+
+                    <input
+                        id="acquired_on"
+                        name="acquired_on"
+                        type="date"
+                    >
+
+                    <span
+                        class="error"
+                        data-error-for="acquired_on"
+                    ></span>
+                </div>
+            </div>
+
+            <div
+                id="form-error"
+                class="notice notice-error hidden"
+                style="margin-top:16px"
+            ></div>
+
+            <div class="dialog-actions">
+                <button
+                    type="button"
+                    class="btn"
+                    id="cancel-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="save-button"
+                >
+                    Save
+                </button>
+            </div>
+        </form>
+    </dialog>
+
+    <script type="module" src="/js/vehicles.js"></script>
+</body>
+</html>
