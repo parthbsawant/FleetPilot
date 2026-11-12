@@ -184,3 +184,33 @@ export async function updateVehicle(id, values) {
 
     return getVehicle(id);
 }
+
+// Delete a vehicle if it has no associated history.
+export async function deleteVehicle(id) {
+    let result;
+
+    try {
+        result = await pool.query(
+            'DELETE FROM vehicles WHERE id = $1 RETURNING id',
+            [id]
+        );
+    } catch (err) {
+        if (err.code === '23503') {
+            throw createError(
+                409,
+                'VEHICLE_HAS_HISTORY',
+                'This vehicle has trips, services or expenses, so it cannot be deleted. Set its status to inactive instead.'
+            );
+        }
+
+        throw err;
+    }
+
+    if (result.rows.length === 0) {
+        throw createError(
+            404,
+            'VEHICLE_NOT_FOUND',
+            `Vehicle ${id} not found`
+        );
+    }
+}
