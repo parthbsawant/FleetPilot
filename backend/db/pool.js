@@ -5,6 +5,8 @@ import pg from 'pg';
 import {config, isProduction} from '../config.js';
 
 pg.types.setTypeParser(1082, (text) => text);
+// we tell the pg not to convert the received date into js date object
+// rather we tell it to store as a string (store as it is received)
 
 const { Pool } = pg;
 
