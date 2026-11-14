@@ -26,7 +26,7 @@ export function parseId(text) {
 }
 
 //helper function for checking the date format & if the date is valid (not exported)
-function isRealDate(text){
+export function isRealDate(text){
     if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) {
         return false;
     }
@@ -37,7 +37,7 @@ function isRealDate(text){
 }
 
 // to check if the date is valid date in INDIA
-function todayInIndia(){
+export function todayInIndia(){
     return new Intl.DateTimeFormat('en-CA',{
         timeZone : 'Asia/Kolkata'
     }).format(new Date());
