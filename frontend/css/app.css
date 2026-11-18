@@ -364,3 +364,49 @@ dialog::backdrop {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* ---------- 8. Vehicle detail page ---------- */
+.back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: var(--graphite);
+}
+
+.details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.details-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.details-value {
+    font-weight: 600;
+}
+
+/* The registration number in the vehicles table is a link */
+.row-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.row-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 760px) {
+    .details {
+        grid-template-columns: 1fr 1fr;
+    }
+}

@@ -63,12 +63,14 @@ function showMessageRow(text) {
     `;
 }
 
-
 function rowHtml(vehicle) {
     return `
         <tr>
             <td>
-                <strong>${escapeHtml(vehicle.registration_number)}</strong>
+
+                <a class="row-link" href="/vehicle.html?id=${vehicle.id}">
+                    <strong>${escapeHtml(vehicle.registration_number)}</strong>
+                </a>
             </td>
 
             <td>${escapeHtml(vehicle.name_model)}</td>

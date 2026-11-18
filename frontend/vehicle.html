@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vehicle · FleetPilot</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">Fleet<span>Pilot</span></div>
+
+            <nav class="nav">
+                <a href="/">Dashboard</a>
+                <a href="/vehicles.html" class="active">Vehicles</a>
+                <span class="soon">Trips <small>soon</small></span>
+                <span class="soon">Expenses <small>soon</small></span>
+                <span class="soon">Maintenance <small>soon</small></span>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <a href="/vehicles.html" class="back-link">‹ All vehicles</a>
+
+            <div class="page-header">
+                <h1 id="vehicle-title">Vehicle</h1>
+            </div>
+
+            <div id="notice" class="notice hidden"></div>
+
+            <!-- The vehicle's details are put here by vehicle.js -->
+            <div class="card details" id="details"></div>
+        </main>
+    </div>
+
+    <script type="module" src="/js/vehicle.js"></script>
+</body>
+</html>
