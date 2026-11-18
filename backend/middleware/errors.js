@@ -24,6 +24,44 @@ export function notFound(req, res, next) {
     );
 }
 
+// ---------- Database refusals -> readable messages ----------
+// When PostgreSQL refuses a query, its error has a 5-character `code`
+// and, for broken rules, the `constraint` name from schema.sql.
+
+// Messages for specific rules (constraint names from schema.sql)
+const CONSTRAINT_MESSAGES = {
+    one_in_progress_trip_per_vehicle: 'This vehicle already has a trip in progress',
+    trips_vehicle_id_fkey: 'Choose a vehicle that exists',
+    odometers_not_negative: 'Odometer readings cannot be negative',
+    end_odometer_needs_start: 'Enter the start reading too',
+    end_odometer_after_start: 'The end reading must be at least the start reading',
+    end_time_after_start: 'The end time must be after the start time',
+    in_progress_needs_start_odometer: 'A trip in progress needs a start reading',
+    completed_needs_readings_and_end_time: 'A completed trip needs both readings and an end time',
+    valid_trip_status: 'Choose a valid status'
+};
+
+// Messages for each kind of refusal: [HTTP status, message]
+const DATABASE_CODE_MESSAGES = {
+    '23502': [400, 'Please fill in all required fields'],           // NOT NULL
+    '23514': [400, 'Some values do not make sense together'],       // CHECK
+    '23503': [400, 'A linked record does not exist'],               // foreign key
+    '23505': [409, 'This would create a duplicate'],                // UNIQUE
+    '22P02': [400, 'Some values are not in the right format'],      // not a number
+    '22007': [400, 'Some dates are not in the right format'],       // bad date
+    '22008': [400, 'Some dates are not real dates'],                // e.g. 31 Feb
+    '22003': [400, 'A number is too large']                         // out of range
+};
+
+function fromDatabaseError(err) {
+    const [status, message] = DATABASE_CODE_MESSAGES[err.code];
+
+    return createError(
+        status,
+        'DATABASE_REFUSED',
+        CONSTRAINT_MESSAGES[err.constraint] ?? message
+    );
+}
 
 // The last stop for every error.
 export function errorHandler(err, req, res, next) {
@@ -36,7 +74,11 @@ export function errorHandler(err, req, res, next) {
             'Request body is not valid JSON'
         );
     }
-
+    
+    if (DATABASE_CODE_MESSAGES[err.code]) {
+        err = fromDatabaseError(err);
+    }
+    
     // Handle errors created intentionally by our application.
     if (err.isAppError) {
         res.status(err.status).json({
