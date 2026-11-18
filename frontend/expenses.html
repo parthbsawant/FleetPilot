@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Expenses · FleetPilot</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">Fleet<span>Pilot</span></div>
+
+            <nav class="nav">
+                <a href="/">Dashboard</a>
+                <a href="/vehicles.html">Vehicles</a>
+                <a href="/trips.html">Trips</a>
+                <a href="/expenses.html" class="active">Expenses</a>
+                <a href="/maintenance.html">Maintenance</a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="page-header">
+                <h1>Expenses</h1>
+                <button class="btn btn-primary" id="add-button">
+                    + Add expense
+                </button>
+            </div>
+
+            <div id="notice" class="notice hidden"></div>
+
+            <div class="toolbar">
+                <input
+                    id="search"
+                    type="search"
+                    placeholder="Search description or registration"
+                >
+
+                <select id="vehicle-filter">
+                    <option value="">All vehicles</option>
+                </select>
+
+                <select id="category-filter">
+                    <option value="">All categories</option>
+                    <option value="fuel">Fuel</option>
+                    <option value="maintenance">Maintenance</option>
+                    <option value="tolls_parking">Tolls &amp; parking</option>
+                    <option value="insurance_permits">Insurance &amp; permits</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <input id="from-filter" type="date" title="On or after">
+                <input id="to-filter" type="date" title="On or before">
+            </div>
+
+            <p class="summary" id="summary"></p>
+
+            <div class="card table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Vehicle</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th class="num">Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="expense-rows"></tbody>
+                </table>
+            </div>
+
+            <div class="pager">
+                <span id="pager-text"></span>
+
+                <span>
+                    <button class="btn btn-small" id="prev-page">
+                        ‹ Previous
+                    </button>
+
+                    <button class="btn btn-small" id="next-page">
+                        Next ›
+                    </button>
+                </span>
+            </div>
+        </main>
+    </div>
+
+    <dialog id="expense-dialog">
+        <form id="expense-form" class="dialog-body" novalidate>
+            <h2 id="dialog-title">Add expense</h2>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="vehicle_id">Vehicle</label>
+
+                    <select id="vehicle_id" name="vehicle_id">
+                        <option value="">Choose…</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="expense_date">Date</label>
+                    <input id="expense_date" name="expense_date" type="date">
+                </div>
+
+                <div class="field">
+                    <label for="category">Category</label>
+
+                    <select id="category" name="category">
+                        <option value="">Choose…</option>
+                        <option value="fuel">Fuel</option>
+                        <option value="maintenance">Maintenance</option>
+                        <option value="tolls_parking">Tolls &amp; parking</option>
+                        <option value="insurance_permits">Insurance &amp; permits</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="amount">Amount (₹)</label>
+                    <input
+                        id="amount"
+                        name="amount"
+                        type="number"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="8624.50"
+                    >
+                </div>
+
+                <div class="field wide">
+                    <label for="description">Description</label>
+                    <input id="description" name="description" placeholder="Optional, e.g. Diesel 93.3 L">
+                </div>
+            </div>
+
+            <div
+                id="form-error"
+                class="notice notice-error hidden"
+                style="margin-top:16px"
+            ></div>
+
+            <div class="dialog-actions">
+                <button type="button" class="btn" id="cancel-button">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn btn-primary" id="save-button">
+                    Save
+                </button>
+            </div>
+        </form>
+    </dialog>
+
+    <script type="module" src="/js/expenses.js"></script>
+</body>
+</html>
