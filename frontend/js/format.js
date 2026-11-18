@@ -74,3 +74,25 @@ export const ALERT_LABELS = {
     ok: 'OK',
     no_schedule: 'No schedule'
 };
+
+// ---------- Money and expenses ----------
+
+const moneyFormat = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR'
+});
+
+// "8624.50" (text from the API) or 8624.5 -> "₹8,624.50"
+export function formatMoney(amount) {
+    return amount === null || amount === undefined
+        ? '—'
+        : moneyFormat.format(Number(amount));
+}
+
+export const CATEGORY_LABELS = {
+    fuel: 'Fuel',
+    maintenance: 'Maintenance',
+    tolls_parking: 'Tolls & parking',
+    insurance_permits: 'Insurance & permits',
+    other: 'Other'
+};
