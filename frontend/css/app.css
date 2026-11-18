@@ -410,3 +410,46 @@ dialog::backdrop {
         grid-template-columns: 1fr 1fr;
     }
 }
+
+/* ---------- 9. Trips ---------- */
+/* Badges never break onto two lines ("In progress") */
+.badge {
+    white-space: nowrap;
+}
+
+.badge-scheduled {
+    background: #E6ECF5;
+    color: #3A5378;
+}
+
+.badge-in_progress {
+    background: #FFF1D6;
+    color: #8A5A00;
+}
+
+.badge-completed {
+    background: #DDF3F0;
+    color: #1E6E66;
+}
+
+.badge-cancelled {
+    background: #E9E9EC;
+    color: #555B66;
+}
+
+/* Small grey text under a main value, e.g. the odometer range under a distance */
+.muted {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+/* Keeps short values like dates on one line */
+.nowrap {
+    white-space: nowrap;
+}
+
+/* The "Recent trips" card on the vehicle detail page */
+.section-title {
+    font-size: 1.1rem;
+    margin: 28px 0 12px;
+}
