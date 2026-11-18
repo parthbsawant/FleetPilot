@@ -65,3 +65,12 @@ export const TRIP_STATUS_LABELS = {
     completed: 'Completed',
     cancelled: 'Cancelled'
 };
+
+// ---------- Maintenance ----------
+
+export const ALERT_LABELS = {
+    overdue: 'Overdue',
+    due_soon: 'Due soon',
+    ok: 'OK',
+    no_schedule: 'No schedule'
+};
