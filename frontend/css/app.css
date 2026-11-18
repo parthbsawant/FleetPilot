@@ -453,3 +453,47 @@ dialog::backdrop {
     font-size: 1.1rem;
     margin: 28px 0 12px;
 }
+
+/* ---------- 10. Maintenance ---------- */
+.badge-overdue {
+    background: #FBE4E1;
+    color: #A93226;
+}
+
+.badge-due_soon {
+    background: #FFF1D6;
+    color: #8A5A00;
+}
+
+.badge-ok {
+    background: #DDF3F0;
+    color: #1E6E66;
+}
+
+.badge-no_schedule {
+    background: #E9E9EC;
+    color: #555B66;
+}
+
+/* A heading row inside a card: title on the left, a control on the right */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 1.15rem;
+}
+
+.check-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
