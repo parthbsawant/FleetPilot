@@ -202,4 +202,15 @@ async function loadRecentExpenses() {
         }
     } catch (err) {
         expenseRowsEl.innerHTML = `
-            <tr><td class="message" colspan="4">${escapeHtml(`Could not load expenses:
+                            <tr><td class="message" colspan="4">${escapeHtml(`Could not load expenses: ${err.message}`)}</td></tr>
+        `;
+    }
+}
+
+
+// ---------- 9. Start ----------
+
+loadVehicle();
+loadRecentTrips();
+loadRecentServices();
+loadRecentExpenses();
