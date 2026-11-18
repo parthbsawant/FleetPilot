@@ -7,6 +7,8 @@ import { api } from './api.js';
 import {
     formatKm,
     formatDate,
+    formatDateTime,
+    TRIP_STATUS_LABELS,
     TYPE_LABELS,
     STATUS_LABELS,
     escapeHtml
@@ -92,3 +94,4 @@ async function loadVehicle() {
 // ---------- 6. Start ----------
 
 loadVehicle();
+loadRecentTrips();
