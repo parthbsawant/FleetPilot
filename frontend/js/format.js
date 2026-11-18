@@ -47,3 +47,21 @@ export function escapeHtml(value) {
         .replaceAll('"', '&quot;')
         .replaceAll("'", '&#39;');
 }
+
+// ---------- Trips ----------
+
+// "2026-11-14T06:30" -> "14 Nov 2026, 06:30"
+export function formatDateTime(text) {
+    if (!text) return '—';
+
+    const [date, time] = text.split('T');
+
+    return `${formatDate(date)}, ${time}`;
+}
+
+export const TRIP_STATUS_LABELS = {
+    scheduled: 'Scheduled',
+    in_progress: 'In progress',
+    completed: 'Completed',
+    cancelled: 'Cancelled'
+};
