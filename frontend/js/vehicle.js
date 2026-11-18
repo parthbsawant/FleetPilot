@@ -9,6 +9,8 @@ import {
     formatDate,
     formatDateTime,
     TRIP_STATUS_LABELS,
+    formatMoney,
+    CATEGORY_LABELS,
     TYPE_LABELS,
     STATUS_LABELS,
     escapeHtml
@@ -96,3 +98,4 @@ async function loadVehicle() {
 loadVehicle();
 loadRecentTrips();
 loadRecentServices();
+loadRecentExpenses();
