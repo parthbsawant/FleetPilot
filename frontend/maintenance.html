@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Maintenance · FleetPilot</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">Fleet<span>Pilot</span></div>
+
+            <nav class="nav">
+                <a href="/">Dashboard</a>
+                <a href="/vehicles.html">Vehicles</a>
+                <a href="/trips.html">Trips</a>
+                <span class="soon">Expenses <small>soon</small></span>
+                <a href="/maintenance.html" class="active">Maintenance</a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="page-header">
+                <h1>Maintenance</h1>
+                <button class="btn btn-primary" id="add-button">
+                    + Add service
+                </button>
+            </div>
+
+            <div id="notice" class="notice hidden"></div>
+
+            <!-- Service alerts: which vehicles need a service soon -->
+            <div class="card table-wrap">
+                <div class="section-header">
+                    <h2 id="alerts-title">Service alerts</h2>
+
+                    <label class="check-label">
+                        <input type="checkbox" id="alerts-only" checked>
+                        Only vehicles that need attention
+                    </label>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vehicle</th>
+                            <th>Alert</th>
+                            <th>Next service date</th>
+                            <th class="num">Distance to service</th>
+                            <th>Last serviced</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="alert-rows"></tbody>
+                </table>
+            </div>
+
+            <!-- Service history -->
+            <h2 class="section-title">Service history</h2>
+
+            <div class="toolbar">
+                <input
+                    id="search"
+                    type="search"
+                    placeholder="Search service or registration"
+                >
+
+                <select id="vehicle-filter">
+                    <option value="">All vehicles</option>
+                </select>
+
+                <input id="from-filter" type="date" title="Serviced on or after">
+                <input id="to-filter" type="date" title="Serviced on or before">
+            </div>
+
+            <div class="card table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Vehicle</th>
+                            <th>Service</th>
+                            <th class="num">Odometer</th>
+                            <th>Next service</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="maintenance-rows"></tbody>
+                </table>
+            </div>
+
+            <div class="pager">
+                <span id="pager-text"></span>
+
+                <span>
+                    <button class="btn btn-small" id="prev-page">
+                        ‹ Previous
+                    </button>
+
+                    <button class="btn btn-small" id="next-page">
+                        Next ›
+                    </button>
+                </span>
+            </div>
+        </main>
+    </div>
+
+    <dialog id="maintenance-dialog">
+        <form id="maintenance-form" class="dialog-body" novalidate>
+            <h2 id="dialog-title">Add service</h2>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="vehicle_id">Vehicle</label>
+
+                    <select id="vehicle_id" name="vehicle_id">
+                        <option value="">Choose…</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="service_date">Service date</label>
+                    <input id="service_date" name="service_date" type="date">
+                </div>
+
+                <div class="field">
+                    <label for="service_type">Service type</label>
+                    <input id="service_type" name="service_type" placeholder="Routine service">
+                </div>
+
+                <div class="field">
+                    <label for="odometer_km">Odometer at service (km)</label>
+                    <input id="odometer_km" name="odometer_km" type="number" min="0" step="1">
+                </div>
+
+                <div class="field">
+                    <label for="next_service_date">Next service date</label>
+                    <input id="next_service_date" name="next_service_date" type="date">
+                </div>
+
+                <div class="field">
+                    <label for="next_service_odometer_km">Next service at (km)</label>
+                    <input
+                        id="next_service_odometer_km"
+                        name="next_service_odometer_km"
+                        type="number"
+                        min="0"
+                        step="1"
+                    >
+                </div>
+
+                <div class="field wide">
+                    <label for="description">Description</label>
+                    <input id="description" name="description" placeholder="Optional, e.g. Oil and filters">
+                </div>
+            </div>
+
+            <div
+                id="form-error"
+                class="notice notice-error hidden"
+                style="margin-top:16px"
+            ></div>
+
+            <div class="dialog-actions">
+                <button type="button" class="btn" id="cancel-button">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn btn-primary" id="save-button">
+                    Save
+                </button>
+            </div>
+        </form>
+    </dialog>
+
+    <script type="module" src="/js/maintenance.js"></script>
+</body>
+</html>
