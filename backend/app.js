@@ -5,6 +5,7 @@
 import express from 'express';
 import { healthRouter } from './routes/health.routes.js';
 import { vehiclesRouter } from './routes/vehicles.routes.js';
+import { tripsRouter } from './routes/trips.routes.js'; 
 import { notFound, errorHandler } from './middleware/errors.js';
 
 export const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
 // 3. API routes (more are added in later steps).
 app.use('/api/health', healthRouter);
 app.use('/api/vehicles', vehiclesRouter);
+app.use('/api/trips', tripsRouter);     
 
 // 4. Unknown /api/... URLs get a JSON 404.
 app.use('/api', notFound);
