@@ -43,7 +43,11 @@ const CONSTRAINT_MESSAGES = {
     service_type_not_blank: 'Enter the service type',
     maintenance_odometer_not_negative: 'The odometer reading cannot be negative',
     next_service_date_after_service: 'The next service date must be after the service date',
-    next_service_odometer_after_reading: 'The next service km must be more than the odometer reading'
+    next_service_odometer_after_reading: 'The next service km must be more than the odometer reading',
+    expenses_vehicle_id_fkey: 'Choose a vehicle that exists',
+    valid_expense_category: 'Choose a valid category',
+    amount_in_range: 'The amount must be more than 0 and at most ₹10,00,000',
+    linked_expense_is_maintenance: 'This expense came from a maintenance record, so its category must stay Maintenance',
 };
 
 // Messages for each kind of refusal: [HTTP status, message]
