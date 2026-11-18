@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trips · FleetPilot</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">Fleet<span>Pilot</span></div>
+
+            <nav class="nav">
+                <a href="/">Dashboard</a>
+                <a href="/vehicles.html">Vehicles</a>
+                <a href="/trips.html" class="active">Trips</a>
+                <span class="soon">Expenses <small>soon</small></span>
+                <span class="soon">Maintenance <small>soon</small></span>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="page-header">
+                <h1>Trips</h1>
+                <button class="btn btn-primary" id="add-button">
+                    + Add trip
+                </button>
+            </div>
+
+            <div id="notice" class="notice hidden"></div>
+
+            <div class="toolbar">
+                <input
+                    id="search"
+                    type="search"
+                    placeholder="Search place or registration"
+                >
+
+                <select id="vehicle-filter">
+                    <option value="">All vehicles</option>
+                </select>
+
+                <select id="status-filter">
+                    <option value="">All statuses</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="in_progress">In progress</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+
+                <input id="from-filter" type="date" title="Starting on or after">
+                <input id="to-filter" type="date" title="Starting on or before">
+            </div>
+
+            <div class="card table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vehicle</th>
+                            <th>Route</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th class="num">Distance</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="trip-rows"></tbody>
+                </table>
+            </div>
+
+            <div class="pager">
+                <span id="pager-text"></span>
+
+                <span>
+                    <button class="btn btn-small" id="prev-page">
+                        ‹ Previous
+                    </button>
+
+                    <button class="btn btn-small" id="next-page">
+                        Next ›
+                    </button>
+                </span>
+            </div>
+        </main>
+    </div>
+
+    <dialog id="trip-dialog">
+        <form id="trip-form" class="dialog-body" novalidate>
+            <h2 id="dialog-title">Add trip</h2>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="vehicle_id">Vehicle</label>
+
+                    <select id="vehicle_id" name="vehicle_id">
+                        <option value="">Choose…</option>
+                    </select>
+
+                </div>
+
+                <div class="field">
+                    <label for="status">Status</label>
+
+                    <select id="status" name="status">
+                        <option value="scheduled">Scheduled</option>
+                        <option value="in_progress">In progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+
+                </div>
+
+                <div class="field">
+                    <label for="origin">From</label>
+                    <input id="origin" name="origin" placeholder="Pune">
+                </div>
+
+                <div class="field">
+                    <label for="destination">To</label>
+                    <input id="destination" name="destination" placeholder="Mumbai">
+                </div>
+
+                <div class="field">
+                    <label for="start_at">Start time</label>
+                    <input id="start_at" name="start_at" type="datetime-local">
+                </div>
+
+                <div class="field">
+                    <label for="end_at">End time</label>
+                    <input id="end_at" name="end_at" type="datetime-local">
+                </div>
+
+                <div class="field">
+                    <label for="start_odometer_km">Start odometer (km)</label>
+                    <input
+                        id="start_odometer_km"
+                        name="start_odometer_km"
+                        type="number"
+                        min="0"
+                        step="1"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="end_odometer_km">End odometer (km)</label>
+                    <input
+                        id="end_odometer_km"
+                        name="end_odometer_km"
+                        type="number"
+                        min="0"
+                        step="1"
+                    >
+                </div>
+
+                <div class="field wide">
+                    <label for="notes">Notes</label>
+                    <input id="notes" name="notes" placeholder="Optional">
+                </div>
+            </div>
+
+            <div
+                id="form-error"
+                class="notice notice-error hidden"
+                style="margin-top:16px"
+            ></div>
+
+            <div class="dialog-actions">
+                <button type="button" class="btn" id="cancel-button">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn btn-primary" id="save-button">
+                    Save
+                </button>
+            </div>
+        </form>
+    </dialog>
+
+    <script type="module" src="/js/trips.js"></script>
+</body>
+</html>
