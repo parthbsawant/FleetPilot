@@ -1,6 +1,4 @@
 
-// The Vehicle detail page: shows one vehicle.
-// The address looks like /vehicle.html?id=3 and we read the 3 from it.
 
 import { api } from './api.js';
 
@@ -86,16 +84,122 @@ async function loadVehicle() {
 
         showVehicle(result.data);
     } catch (err) {
-        // A wrong id gives the API's own message, e.g. "Vehicle not found"
         showNotice(err.message, 'error');
         detailsEl.classList.add('hidden');
     }
 }
 
 
-// ---------- 6. Start ----------
+// ---------- 6. This vehicle's recent trips ----------
 
-loadVehicle();
-loadRecentTrips();
-loadRecentServices();
-loadRecentExpenses();
+const tripRowsEl = document.getElementById('trip-rows');
+
+function tripRowHtml(trip) {
+    return `
+        <tr>
+            <td>${escapeHtml(trip.origin)} → ${escapeHtml(trip.destination)}</td>
+            <td class="nowrap">${formatDateTime(trip.start_at)}</td>
+            <td class="num">${formatKm(trip.distance_km)}</td>
+            <td>
+                <span class="badge badge-${trip.status}">
+                    ${TRIP_STATUS_LABELS[trip.status]}
+                </span>
+            </td>
+        </tr>
+    `;
+}
+
+async function loadRecentTrips() {
+    try {
+        // The normal trips list, filtered to this vehicle, newest 10
+        const result = await api(`/trips?vehicle_id=${vehicleId}&limit=10`);
+
+        if (result.data.length === 0) {
+            tripRowsEl.innerHTML = `
+                <tr><td class="message" colspan="4">No trips yet.</td></tr>
+            `;
+        } else {
+            tripRowsEl.innerHTML = result.data.map(tripRowHtml).join('');
+        }
+    } catch (err) {
+        tripRowsEl.innerHTML = `
+            <tr><td class="message" colspan="4">${escapeHtml(`Could not load trips: ${err.message}`)}</td></tr>
+        `;
+    }
+}
+
+
+// ---------- 7. This vehicle's recent services ----------
+
+const serviceRowsEl = document.getElementById('service-rows');
+
+function serviceRowHtml(record) {
+    // Next service: a date, a reading, both, or neither
+    const nextParts = [];
+    if (record.next_service_date) nextParts.push(formatDate(record.next_service_date));
+    if (record.next_service_odometer_km !== null) nextParts.push(formatKm(record.next_service_odometer_km));
+
+    return `
+        <tr>
+            <td class="nowrap">${formatDate(record.service_date)}</td>
+            <td>${escapeHtml(record.service_type)}</td>
+            <td class="num nowrap">${formatKm(record.odometer_km)}</td>
+            <td>${nextParts.length > 0 ? nextParts.join(' or ') : '—'}</td>
+        </tr>
+    `;
+}
+
+async function loadRecentServices() {
+    try {
+        // The normal maintenance list, filtered to this vehicle, newest 5
+        const result = await api(`/maintenance?vehicle_id=${vehicleId}&limit=5`);
+
+        if (result.data.length === 0) {
+            serviceRowsEl.innerHTML = `
+                <tr><td class="message" colspan="4">No services yet.</td></tr>
+            `;
+        } else {
+            serviceRowsEl.innerHTML = result.data.map(serviceRowHtml).join('');
+        }
+    } catch (err) {
+        serviceRowsEl.innerHTML = `
+            <tr><td class="message" colspan="4">${escapeHtml(`Could not load services: ${err.message}`)}</td></tr>
+        `;
+    }
+}
+
+
+// ---------- 8. This vehicle's recent expenses ----------
+
+const expenseRowsEl = document.getElementById('expense-rows');
+const expensesTitleEl = document.getElementById('expenses-title');
+
+function expenseRowHtml(expense) {
+    return `
+        <tr>
+            <td class="nowrap">${formatDate(expense.expense_date)}</td>
+            <td>${CATEGORY_LABELS[expense.category]}</td>
+            <td>${escapeHtml(expense.description ?? '—')}</td>
+            <td class="num nowrap">${formatMoney(expense.amount)}</td>
+        </tr>
+    `;
+}
+
+async function loadRecentExpenses() {
+    try {
+        // The normal expenses list, filtered to this vehicle, newest 5
+        const result = await api(`/expenses?vehicle_id=${vehicleId}&limit=5`);
+
+        // The total covers ALL of this vehicle's expenses, not just these 5
+        expensesTitleEl.textContent = `Recent expenses (total ${formatMoney(result.meta.total_amount)})`;
+
+        if (result.data.length === 0) {
+            expenseRowsEl.innerHTML = `
+                <tr><td class="message" colspan="4">No expenses yet.</td></tr>
+            `;
+        } else {
+            expenseRowsEl.innerHTML = result.data.map(expenseRowHtml).join('');
+        }
+    } catch (err) {
+        expenseRowsEl.innerHTML = `
+            <tr><td class="message" colspan="4">${escapeHtml(`Could not load expenses:
