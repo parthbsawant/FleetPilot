@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FleetPilot · Fleet management made simple</title>
+    <meta name="description" content="Track vehicles, trips, expenses and maintenance for your fleet in one place.">
+    <!-- app.css gives the colours and buttons; landing.css adds this page's layout -->
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/landing.css">
+</head>
+<body class="landing">
+
+    <!-- ---------- Top bar ---------- -->
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <div class="brand">Fleet<span>Pilot</span></div>
+
+            <a href="/dashboard.html" class="btn btn-primary">Open dashboard</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- ---------- Hero ---------- -->
+        <section class="hero">
+            <div class="container hero-inner">
+                <div class="hero-text">
+                    <p class="eyebrow">Fleet management for buses, coaches and vans</p>
+
+                    <h1>Every vehicle, trip and rupee in one place.</h1>
+
+                    <p class="lead">
+                        FleetPilot keeps your vehicles, trips, expenses and services together,
+                        and tells you what each kilometre really costs, and which vehicle
+                        needs a service next.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="/dashboard.html" class="btn btn-primary btn-large">Open dashboard</a>
+                        <a href="/vehicles.html" class="btn btn-large btn-ghost">See the vehicles</a>
+                    </div>
+                </div>
+
+                <!-- Live numbers, filled by landing.js from GET /api/dashboard -->
+                <div class="hero-card">
+                    <p class="hero-card-title">Your fleet, last 12 months</p>
+
+                    <div class="stat-grid">
+                        <div>
+                            <div class="stat-value" id="stat-vehicles">…</div>
+                            <div class="stat-label">vehicles in service</div>
+                        </div>
+
+                        <div>
+                            <div class="stat-value" id="stat-trips">…</div>
+                            <div class="stat-label">trips completed</div>
+                        </div>
+
+                        <div>
+                            <div class="stat-value" id="stat-distance">…</div>
+                            <div class="stat-label">driven</div>
+                        </div>
+
+                        <div>
+                            <div class="stat-value" id="stat-cost">…</div>
+                            <div class="stat-label">cost per km</div>
+                        </div>
+                    </div>
+
+                    <p class="hero-card-note" id="stat-note">Live from your database</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---------- What you can do ---------- -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-heading">Everything a small fleet needs</h2>
+
+                <div class="feature-grid">
+                    <a href="/vehicles.html" class="feature">
+                        <span class="feature-icon">🚌</span>
+                        <h3>Vehicles</h3>
+                        <p>Every bus and van with its status, odometer and full history on one page.</p>
+                    </a>
+
+                    <a href="/trips.html" class="feature">
+                        <span class="feature-icon">🛣️</span>
+                        <h3>Trips</h3>
+                        <p>Plan, start and complete trips. Distance is worked out from the odometer.</p>
+                    </a>
+
+                    <a href="/expenses.html" class="feature">
+                        <span class="feature-icon">₹</span>
+                        <h3>Expenses</h3>
+                        <p>Fuel, tolls, insurance and repairs, filtered and totalled in rupees.</p>
+                    </a>
+
+                    <a href="/maintenance.html" class="feature">
+                        <span class="feature-icon">🔧</span>
+                        <h3>Maintenance</h3>
+                        <p>Service history and alerts for vehicles that are overdue or due soon.</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---------- How it works ---------- -->
+        <section class="section section-alt">
+            <div class="container">
+                <h2 class="section-heading">How it works</h2>
+
+                <ol class="steps-row">
+                    <li>
+                        <span class="step-number">1</span>
+                        <h3>Add your vehicles</h3>
+                        <p>Registration, model, type and the odometer reading when it joined.</p>
+                    </li>
+
+                    <li>
+                        <span class="step-number">2</span>
+                        <h3>Record trips and costs</h3>
+                        <p>Log each trip's readings, every expense and every service as it happens.</p>
+                    </li>
+
+                    <li>
+                        <span class="step-number">3</span>
+                        <h3>Watch the dashboard</h3>
+                        <p>See distance, spending and cost per km by month, and which vehicle needs attention.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <!-- ---------- Footer ---------- -->
+    <footer class="footer">
+        <div class="container">
+            <div class="brand">Fleet<span>Pilot</span></div>
+            <p>Built with HTML, CSS, JavaScript, Node.js, Express and PostgreSQL.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="/js/landing.js"></script>
+</body>
+</html>
