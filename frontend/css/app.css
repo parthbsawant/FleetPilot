@@ -509,3 +509,76 @@ dialog::backdrop {
     color: var(--graphite);
     font-size: 1.1rem;
 }
+
+
+/* ---------- 12. Dashboard ---------- */
+/* The date range under the "Dashboard" heading */
+.period-text {
+    margin: 4px 0 0;
+    color: var(--muted);
+}
+
+/* Four summary cards in a row (2 on tablets, 1 on phones) */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.kpi-label {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.kpi-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 6px 0 4px;
+}
+
+.kpi-sub {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+/* Charts and alerts: two per row */
+.chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.card-title {
+    font-size: 1rem;
+    margin: 0 0 12px;
+}
+
+/* Chart.js fills its parent, so the parent decides the height */
+.chart-box {
+    position: relative;
+    height: 260px;
+}
+
+.card-link {
+    margin: 12px 0 0;
+}
+
+.card-link a {
+    color: var(--orange);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+@media (max-width: 1100px) {
+    .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .kpi-grid,
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+}
