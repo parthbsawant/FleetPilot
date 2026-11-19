@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -23,33 +22,98 @@
 
         <main class="content">
             <div class="page-header">
-                <h1>Dashboard</h1>
+                <div>
+                    <h1>Dashboard</h1>
+                    <p class="period-text" id="period-text"></p>
+                </div>
+
+                <select id="period">
+                    <option value="1">This month</option>
+                    <option value="3">Last 3 months</option>
+                    <option value="6" selected>Last 6 months</option>
+                    <option value="12">Last 12 months</option>
+                </select>
             </div>
 
-            <div class="card">
-                <p>
-                    The dashboard arrives in Step 7. For now:
-                    <a href="/vehicles.html">manage vehicles</a>.
-                </p>
+            <div id="notice" class="notice hidden"></div>
 
-                <p>
-                    Server: <strong id="status">checking…</strong>
-                </p>
+            <!-- Four summary cards, filled by dashboard.js -->
+            <div class="kpi-grid">
+                <div class="card kpi">
+                    <div class="kpi-label">Vehicles in the fleet</div>
+                    <div class="kpi-value" id="kpi-fleet">…</div>
+                    <div class="kpi-sub" id="kpi-fleet-sub"></div>
+                </div>
+
+                <div class="card kpi">
+                    <div class="kpi-label">Completed trips</div>
+                    <div class="kpi-value" id="kpi-trips">…</div>
+                    <div class="kpi-sub" id="kpi-trips-sub"></div>
+                </div>
+
+                <div class="card kpi">
+                    <div class="kpi-label">Expenses</div>
+                    <div class="kpi-value" id="kpi-expenses">…</div>
+                    <div class="kpi-sub" id="kpi-expenses-sub"></div>
+                </div>
+
+                <div class="card kpi">
+                    <div class="kpi-label">Cost per km</div>
+                    <div class="kpi-value" id="kpi-cost">…</div>
+                    <div class="kpi-sub">expenses ÷ distance driven</div>
+                </div>
+            </div>
+
+            <!-- Charts (drawn by Chart.js) -->
+            <div class="chart-grid">
+                <div class="card">
+                    <h2 class="card-title">Distance by month (km)</h2>
+                    <div class="chart-box">
+                        <canvas id="distance-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Expenses by month (₹)</h2>
+                    <div class="chart-box">
+                        <canvas id="expenses-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Expenses by category</h2>
+                    <div class="chart-box">
+                        <canvas id="category-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Service alerts: reuses GET /api/maintenance/alerts -->
+                <div class="card table-wrap">
+                    <h2 class="card-title" id="alerts-title">Service alerts</h2>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Alert</th>
+                                <th>Next service</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="alert-rows"></tbody>
+                    </table>
+
+                    <p class="card-link">
+                        <a href="/maintenance.html">Open maintenance ›</a>
+                    </p>
+                </div>
             </div>
         </main>
     </div>
 
-    <script type="module">
-        import { api } from '/js/api.js';
+    <!-- Chart.js from a CDN: gives us a global "Chart" to draw charts with -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 
-        const statusEl = document.getElementById('status');
-
-        try {
-            await api('/health');
-            statusEl.textContent = 'OK, database connected';
-        } catch (err) {
-            statusEl.textContent = err.message;
-        }
-    </script>
+    <script type="module" src="/js/dashboard.js"></script>
 </body>
 </html>
