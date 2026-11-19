@@ -1,11 +1,8 @@
-/* The landing page only. Colours, .btn and .brand come from app.css. */
 
-/* ---------- 1. Page basics ---------- */
 .landing {
     background: var(--warm-white);
 }
 
-/* Keeps every section's content at a readable width, centred */
 .container {
     max-width: 1100px;
     margin: 0 auto;
@@ -17,7 +14,6 @@
     font-size: 1rem;
 }
 
-/* Links styled as buttons should not be underlined */
 .landing a.btn {
     display: inline-block;
     text-decoration: none;
@@ -34,7 +30,6 @@
 }
 
 
-/* ---------- 2. Top bar ---------- */
 .topbar {
     background: var(--graphite);
     color: var(--warm-white);
@@ -48,14 +43,12 @@
     padding-bottom: 16px;
 }
 
-/* app.css gives .brand a bottom margin for the sidebar; not needed here */
 .topbar .brand,
 .footer .brand {
     margin: 0;
 }
 
 
-/* ---------- 3. Hero ---------- */
 .hero {
     background: var(--graphite);
     color: var(--warm-white);
@@ -94,7 +87,6 @@
     gap: 12px;
 }
 
-/* The live numbers card */
 .hero-card {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -131,7 +123,6 @@
 }
 
 
-/* ---------- 4. Sections ---------- */
 .section {
     padding: 64px 0;
 }
@@ -148,7 +139,6 @@
     text-align: center;
 }
 
-/* Feature cards: each one is a link to its page */
 .feature-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -188,7 +178,6 @@
     line-height: 1.5;
 }
 
-/* The three "How it works" steps */
 .steps-row {
     list-style: none;
     padding: 0;
@@ -215,7 +204,6 @@
 }
 
 
-/* ---------- 5. Footer ---------- */
 .footer {
     background: var(--graphite);
     color: rgba(245, 243, 239, 0.7);
@@ -240,7 +228,6 @@
 }
 
 
-/* ---------- 6. Smaller screens ---------- */
 @media (max-width: 900px) {
     .hero-inner {
         grid-template-columns: 1fr;

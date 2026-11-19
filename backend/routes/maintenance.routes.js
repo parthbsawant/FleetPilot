@@ -125,7 +125,6 @@ maintenanceRouter.get('/', async (req, res) => {
     const limit = Math.min(Number(req.query.limit) || 20, 100);
     const offset = (page - 1) * limit;
 
-    // Build the WHERE from the filters that were sent (same idea as trips)
     const conditions = [];
     const values = [];
 

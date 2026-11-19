@@ -1,5 +1,4 @@
 
-// The Vehicles page: load the list, filter it, and add / edit / delete vehicles.
 
 import { api } from './api.js';
 
@@ -12,7 +11,6 @@ import {
 } from './format.js';
 
 
-// ---------- 1. Find the elements we work with ----------
 
 const rowsEl = document.getElementById('vehicle-rows');
 const noticeEl = document.getElementById('notice');
@@ -32,16 +30,14 @@ const formErrorEl = document.getElementById('form-error');
 const saveButton = document.getElementById('save-button');
 
 
-// ---------- 2. Page state: everything that can change ----------
 
 const PAGE_SIZE = 20;
 
 let currentPage = 1;
-let vehiclesOnPage = []; // The vehicles currently shown
-let editingId = null;    // null = adding; a number = editing
+let vehiclesOnPage = [];
+let editingId = null;
 
 
-// ---------- 3. Messages above the table ----------
 
 function showNotice(message, kind) {
     noticeEl.textContent = message;
@@ -51,7 +47,6 @@ function showNotice(message, kind) {
 function hideNotice() {
     noticeEl.className = 'notice hidden';
 }
-// ---------- 4. Load and show the list ----------
 
 function showMessageRow(text) {
     rowsEl.innerHTML = `

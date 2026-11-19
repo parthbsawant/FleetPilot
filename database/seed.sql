@@ -1,16 +1,6 @@
--- FleetPilot Analytics: sample data. Every vehicle, trip and amount is fictional.
---
--- Dates are written relative to today: CURRENT_DATE - 30 means "30 days ago".
--- So the data always looks recent, and the maintenance alerts always show the
--- same mix (overdue, due soon, OK, inactive) whenever you reset.
---
--- Load it with `npm run db:reset`, which runs schema.sql first. Because the
--- tables are brand new, ids start at 1: vehicle 1 is MH12FP0001, and so on.
 
--- Read every date and time below as Indian time (decision D-08)
 SET TIME ZONE 'Asia/Kolkata';
 
--- ----------------------------------------------------------------- vehicles
 INSERT INTO vehicles (registration_number, name_model, vehicle_type, status, initial_odometer_km, acquired_on) VALUES
   ('MH12FP0001', 'Tata Starbus 41', 'bus', 'active', 48000, '2021-06-15'),
   ('MH12FP0002', 'Ashok Leyland Viking', 'bus', 'active', 61200, '2020-02-10'),
@@ -19,10 +9,7 @@ INSERT INTO vehicles (registration_number, name_model, vehicle_type, status, ini
   ('MH12FP0005', 'Tata Winger 15', 'van', 'in_maintenance', 52300, '2021-03-05'),
   ('MH12FP0006', 'Eicher Skyline Pro', 'bus', 'inactive', 208700, '2015-07-12');
 
--- -------------------------------------------------------------------- trips
--- Odometer readings rise trip after trip for each vehicle (decision D-06).
 INSERT INTO trips (vehicle_id, status, origin, destination, start_at, end_at, start_odometer_km, end_odometer_km, notes) VALUES
-  -- vehicle 1: MH12FP0001
   (1, 'completed', 'Pune', 'Nashik', CURRENT_DATE - 176 + TIME '07:30', CURRENT_DATE - 176 + TIME '20:15', 48011, 48441, NULL),
   (1, 'completed', 'Pune', 'Shirdi', CURRENT_DATE - 166 + TIME '05:30', CURRENT_DATE - 166 + TIME '16:45', 48458, 48843, NULL),
   (1, 'completed', 'Pune', 'Shirdi', CURRENT_DATE - 161 + TIME '06:00', CURRENT_DATE - 161 + TIME '17:30', 48845, 49221, NULL),
@@ -49,7 +36,6 @@ INSERT INTO trips (vehicle_id, status, origin, destination, start_at, end_at, st
   (1, 'completed', 'Pune', 'Satara', CURRENT_DATE - 10 + TIME '05:30', CURRENT_DATE - 10 + TIME '13:00', 56418, 56638, NULL),
   (1, 'completed', 'Pune', 'Kolhapur', CURRENT_DATE - 5 + TIME '05:30', CURRENT_DATE - 5 + TIME '18:00', 56646, 57119, NULL),
   (1, 'in_progress', 'Pune', 'Mumbai', CURRENT_DATE + TIME '06:15', NULL, 57123, NULL, 'School excursion'),
-  -- vehicle 2: MH12FP0002
   (2, 'completed', 'Pune', 'Mumbai', CURRENT_DATE - 178 + TIME '06:00', CURRENT_DATE - 178 + TIME '16:15', 61208, 61522, NULL),
   (2, 'completed', 'Pune', 'Shirdi', CURRENT_DATE - 168 + TIME '06:30', CURRENT_DATE - 168 + TIME '18:15', 61536, 61933, NULL),
   (2, 'completed', 'Pune', 'Nashik', CURRENT_DATE - 159 + TIME '06:00', CURRENT_DATE - 159 + TIME '18:30', 61945, 62383, NULL),
@@ -76,7 +62,6 @@ INSERT INTO trips (vehicle_id, status, origin, destination, start_at, end_at, st
   (2, 'completed', 'Pune', 'Kolhapur', CURRENT_DATE - 18 + TIME '07:00', CURRENT_DATE - 18 + TIME '19:00', 69445, 69889, NULL),
   (2, 'completed', 'Pune', 'Kolhapur', CURRENT_DATE - 8 + TIME '05:30', CURRENT_DATE - 8 + TIME '17:30', 69898, 70350, NULL),
   (2, 'scheduled', 'Pune', 'Shirdi', CURRENT_DATE + 2 + TIME '06:00', NULL, NULL, NULL, 'Pilgrimage group, 41 seats'),
-  -- vehicle 3: MH14FP0003
   (3, 'completed', 'Pune', 'Hyderabad', CURRENT_DATE - 175 + TIME '05:30', CURRENT_DATE - 174 + TIME '15:30', 120512, 121633, NULL),
   (3, 'completed', 'Pune', 'Hyderabad', CURRENT_DATE - 163 + TIME '05:30', CURRENT_DATE - 162 + TIME '15:30', 121642, 122780, NULL),
   (3, 'completed', 'Pune', 'Goa', CURRENT_DATE - 149 + TIME '06:30', CURRENT_DATE - 148 + TIME '12:30', 122792, 123697, NULL),
@@ -93,7 +78,6 @@ INSERT INTO trips (vehicle_id, status, origin, destination, start_at, end_at, st
   (3, 'completed', 'Pune', 'Hyderabad', CURRENT_DATE - 29 + TIME '06:30', CURRENT_DATE - 28 + TIME '16:30', 132809, 133897, NULL),
   (3, 'completed', 'Pune', 'Hyderabad', CURRENT_DATE - 18 + TIME '05:30', CURRENT_DATE - 17 + TIME '16:00', 133900, 134996, NULL),
   (3, 'completed', 'Pune', 'Hyderabad', CURRENT_DATE - 6 + TIME '06:00', CURRENT_DATE - 5 + TIME '16:15', 135007, 136180, NULL),
-  -- vehicle 4: MH14FP0004
   (4, 'completed', 'Pune', 'Mahabaleshwar', CURRENT_DATE - 174 + TIME '06:30', CURRENT_DATE - 174 + TIME '16:00', 35401, 35637, NULL),
   (4, 'completed', 'Pune', 'Lavasa', CURRENT_DATE - 169 + TIME '07:30', CURRENT_DATE - 169 + TIME '14:00', 35647, 35768, NULL),
   (4, 'completed', 'Pune', 'Lonavala', CURRENT_DATE - 164 + TIME '06:00', CURRENT_DATE - 164 + TIME '12:30', 35772, 35898, NULL),
@@ -124,7 +108,6 @@ INSERT INTO trips (vehicle_id, status, origin, destination, start_at, end_at, st
   (4, 'completed', 'Pune', 'Lonavala', CURRENT_DATE - 9 + TIME '07:30', CURRENT_DATE - 9 + TIME '13:30', 40402, 40530, NULL),
   (4, 'completed', 'Pune', 'Lonavala', CURRENT_DATE - 4 + TIME '06:00', CURRENT_DATE - 4 + TIME '12:15', 40536, 40663, NULL),
   (4, 'scheduled', 'Pune', 'Lonavala', CURRENT_DATE + 5 + TIME '07:00', NULL, NULL, NULL, 'Corporate offsite'),
-  -- vehicle 5: MH12FP0005
   (5, 'completed', 'Pune', 'Lonavala', CURRENT_DATE - 172 + TIME '07:00', CURRENT_DATE - 172 + TIME '13:45', 52304, 52435, NULL),
   (5, 'completed', 'Pune', 'Lonavala', CURRENT_DATE - 168 + TIME '07:00', CURRENT_DATE - 168 + TIME '13:15', 52445, 52574, NULL),
   (5, 'completed', 'Pune', 'Alibag', CURRENT_DATE - 161 + TIME '07:30', CURRENT_DATE - 161 + TIME '16:30', 52583, 52885, NULL),
@@ -149,7 +132,6 @@ INSERT INTO trips (vehicle_id, status, origin, destination, start_at, end_at, st
   (5, 'completed', 'Pune', 'Alibag', CURRENT_DATE - 39 + TIME '07:30', CURRENT_DATE - 39 + TIME '17:00', 57765, 58055, NULL),
   (5, 'completed', 'Pune', 'Alibag', CURRENT_DATE - 31 + TIME '06:30', CURRENT_DATE - 31 + TIME '16:15', 58056, 58357, NULL),
   (5, 'completed', 'Pune', 'Lonavala', CURRENT_DATE - 23 + TIME '07:30', CURRENT_DATE - 23 + TIME '14:15', 58366, 58500, NULL),
-  -- vehicle 6: MH12FP0006
   (6, 'completed', 'Pune', 'Nashik', CURRENT_DATE - 176 + TIME '06:30', CURRENT_DATE - 176 + TIME '19:00', 208704, 209121, NULL),
   (6, 'completed', 'Pune', 'Kolhapur', CURRENT_DATE - 169 + TIME '07:30', CURRENT_DATE - 169 + TIME '19:30', 209125, 209596, NULL),
   (6, 'completed', 'Pune', 'Kolhapur', CURRENT_DATE - 164 + TIME '06:00', CURRENT_DATE - 164 + TIME '18:45', 209597, 210078, NULL),
@@ -157,21 +139,17 @@ INSERT INTO trips (vehicle_id, status, origin, destination, start_at, end_at, st
   (6, 'completed', 'Pune', 'Shirdi', CURRENT_DATE - 149 + TIME '06:30', CURRENT_DATE - 149 + TIME '17:45', 210466, 210858, NULL),
   (6, 'completed', 'Pune', 'Shirdi', CURRENT_DATE - 143 + TIME '07:30', CURRENT_DATE - 143 + TIME '19:00', 210862, 211250, NULL);
 
--- -------------------------------------------------------------- maintenance
--- The newest record per vehicle sets its next service (decision D-05).
 INSERT INTO maintenance (vehicle_id, service_date, service_type, description, odometer_km, next_service_date, next_service_odometer_km) VALUES
-  (1, CURRENT_DATE - 170, 'Routine service', 'Oil, filters, brake check', 48446, CURRENT_DATE - 80, 60446),  -- maintenance id 1
-  (1, CURRENT_DATE - 76, 'Routine service', 'Oil, filters, wheel alignment', 52742, CURRENT_DATE + 9, 67742),  -- maintenance id 2
-  (2, CURRENT_DATE - 172, 'Routine service', 'Oil, filters, coolant top-up', 61534, CURRENT_DATE - 4, 81534),  -- maintenance id 3
-  (3, CURRENT_DATE - 150, 'Tyre replacement', 'Six new tyres', 122790, NULL, NULL),  -- maintenance id 4
-  (3, CURRENT_DATE - 60, 'Routine service', 'Full service before winter season', 130731, CURRENT_DATE + 120, 136780),  -- maintenance id 5
-  (4, CURRENT_DATE - 140, 'Brake pads', 'Front brake pads replaced', 36408, NULL, NULL),  -- maintenance id 6
-  (4, CURRENT_DATE - 30, 'Routine service', 'Oil and filters', 39754, CURRENT_DATE + 150, 49754),  -- maintenance id 7
-  (5, CURRENT_DATE - 150, 'Routine service', 'Oil, filters, clutch adjustment', 53201, CURRENT_DATE + 30, 58200),  -- maintenance id 8
-  (6, CURRENT_DATE - 200, 'Routine service', 'Last service before retirement', 208700, CURRENT_DATE - 110, 218700);  -- maintenance id 9
+  (1, CURRENT_DATE - 170, 'Routine service', 'Oil, filters, brake check', 48446, CURRENT_DATE - 80, 60446),
+  (1, CURRENT_DATE - 76, 'Routine service', 'Oil, filters, wheel alignment', 52742, CURRENT_DATE + 9, 67742),
+  (2, CURRENT_DATE - 172, 'Routine service', 'Oil, filters, coolant top-up', 61534, CURRENT_DATE - 4, 81534),
+  (3, CURRENT_DATE - 150, 'Tyre replacement', 'Six new tyres', 122790, NULL, NULL),
+  (3, CURRENT_DATE - 60, 'Routine service', 'Full service before winter season', 130731, CURRENT_DATE + 120, 136780),
+  (4, CURRENT_DATE - 140, 'Brake pads', 'Front brake pads replaced', 36408, NULL, NULL),
+  (4, CURRENT_DATE - 30, 'Routine service', 'Oil and filters', 39754, CURRENT_DATE + 150, 49754),
+  (5, CURRENT_DATE - 150, 'Routine service', 'Oil, filters, clutch adjustment', 53201, CURRENT_DATE + 30, 58200),
+  (6, CURRENT_DATE - 200, 'Routine service', 'Last service before retirement', 208700, CURRENT_DATE - 110, 218700);
 
--- ----------------------------------------------------------------- expenses
--- Maintenance costs are expenses linked by maintenance_id (decision D-04).
 INSERT INTO expenses (vehicle_id, expense_date, category, amount, description, maintenance_id) VALUES
   (6, CURRENT_DATE - 200, 'maintenance', 13900.00, 'Routine service: Last service before retirement', 9),
   (2, CURRENT_DATE - 178, 'fuel', 6747.35, 'Diesel 73.0 L', NULL),

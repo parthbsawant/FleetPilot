@@ -1,5 +1,3 @@
-// Creates an Error that also carries an HTTP status and an error code.
-// Example: throw createError(404, 'NOT_FOUND', 'Vehicle not found');
 
 export function createError(status, code, message, details = null) {
     const error = new Error(message);
@@ -13,7 +11,6 @@ export function createError(status, code, message, details = null) {
 }
 
 
-// Runs when no route matched the request.
 export function notFound(req, res, next) {
     next(
         createError(
@@ -24,11 +21,7 @@ export function notFound(req, res, next) {
     );
 }
 
-// ---------- Database refusals -> readable messages ----------
-// When PostgreSQL refuses a query, its error has a 5-character `code`
-// and, for broken rules, the `constraint` name from schema.sql.
 
-// Messages for specific rules (constraint names from schema.sql)
 const CONSTRAINT_MESSAGES = {
     one_in_progress_trip_per_vehicle: 'This vehicle already has a trip in progress',
     trips_vehicle_id_fkey: 'Choose a vehicle that exists',
@@ -50,16 +43,15 @@ const CONSTRAINT_MESSAGES = {
     linked_expense_is_maintenance: 'This expense came from a maintenance record, so its category must stay Maintenance',
 };
 
-// Messages for each kind of refusal: [HTTP status, message]
 const DATABASE_CODE_MESSAGES = {
-    '23502': [400, 'Please fill in all required fields'],           // NOT NULL
-    '23514': [400, 'Some values do not make sense together'],       // CHECK
-    '23503': [400, 'A linked record does not exist'],               // foreign key
-    '23505': [409, 'This would create a duplicate'],                // UNIQUE
-    '22P02': [400, 'Some values are not in the right format'],      // not a number
-    '22007': [400, 'Some dates are not in the right format'],       // bad date
-    '22008': [400, 'Some dates are not real dates'],                // e.g. 31 Feb
-    '22003': [400, 'A number is too large']                         // out of range
+    '23502': [400, 'Please fill in all required fields'],
+    '23514': [400, 'Some values do not make sense together'],
+    '23503': [400, 'A linked record does not exist'],
+    '23505': [409, 'This would create a duplicate'],
+    '22P02': [400, 'Some values are not in the right format'],
+    '22007': [400, 'Some dates are not in the right format'],
+    '22008': [400, 'Some dates are not real dates'],
+    '22003': [400, 'A number is too large']
 };
 
 function fromDatabaseError(err) {
@@ -72,10 +64,8 @@ function fromDatabaseError(err) {
     );
 }
 
-// The last stop for every error.
 export function errorHandler(err, req, res, next) {
 
-    // Handle invalid JSON request bodies.
     if (err.type === 'entity.parse.failed') {
         err = createError(
             400,
@@ -88,7 +78,6 @@ export function errorHandler(err, req, res, next) {
         err = fromDatabaseError(err);
     }
     
-    // Handle errors created intentionally by our application.
     if (err.isAppError) {
         res.status(err.status).json({
             error: {
@@ -101,7 +90,6 @@ export function errorHandler(err, req, res, next) {
         return;
     }
 
-    // Unexpected errors: show details in terminal.
     console.error(err);
 
     res.status(500).json({
@@ -112,11 +100,3 @@ export function errorHandler(err, req, res, next) {
         }
     });
 }
-
-// What we are doing: We are creating three reusable functions.
-// createError() creates structured errors containing an HTTP 
-// status, error code and message.notFound() handles requests 
-// for URLs that do not exist by forwarding a 404 error.errorHandler() 
-// catches errors passed through Express middleware and sends a consistent
-// JSON response to the client.It also distinguishes errors deliberately 
-// created by our application from unexpected server errors.

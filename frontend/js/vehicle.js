@@ -94,7 +94,6 @@ function tripRowHtml(trip) {
 
 async function loadRecentTrips() {
     try {
-        // The normal trips list, filtered to this vehicle, newest 10
         const result = await api(`/trips?vehicle_id=${vehicleId}&limit=10`);
 
         if (result.data.length === 0) {

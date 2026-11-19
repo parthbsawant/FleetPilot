@@ -1,4 +1,3 @@
-/* Usable CSS*/
 :root {
     --graphite: #202833;
     --orange: #FF7138;
@@ -22,7 +21,6 @@ body {
     color: var(--graphite);
 }
 
-/* Main application layout */
 .layout {
     display: grid;
     grid-template-columns: 230px 1fr;
@@ -97,7 +95,6 @@ body {
     font-size: 1.6rem;
 }
 
-/* Common building blocks */
 .card {
     background: var(--white);
     border: 1px solid var(--border);
@@ -171,7 +168,6 @@ select:focus {
     border-color: var(--teal);
 }
 
-/* Tables */
 .table-wrap {
     overflow-x: auto;
 }
@@ -247,7 +243,6 @@ td.message {
     margin-left: 6px;
 }
 
-/* ---------- 5. Messages ---------- */
 .notice {
     padding: 10px 14px;
     border-radius: 8px;
@@ -268,7 +263,6 @@ td.message {
     display: none;
 }
 
-/* ---------- 6. Dialogs ---------- */
 dialog {
     border: none;
     border-radius: var(--radius);
@@ -334,7 +328,6 @@ dialog::backdrop {
     margin-top: 18px;
 }
 
-/* 7. Responsive layout */
 @media (max-width: 760px) {
     .layout {
         grid-template-columns: 1fr;
@@ -363,7 +356,6 @@ dialog::backdrop {
 }
 
 
-/* 8. Vehicle detail page */
 .back-link {
     display: inline-block;
     margin-bottom: 12px;
@@ -407,7 +399,6 @@ dialog::backdrop {
     }
 }
 
-/* Trips  */
 .badge {
     white-space: nowrap;
 }
@@ -446,7 +437,6 @@ dialog::backdrop {
     margin: 28px 0 12px;
 }
 
-/*10. Maintenance*/
 .badge-overdue {
     background: #FBE4E1;
     color: #A93226;
@@ -490,7 +480,6 @@ dialog::backdrop {
 }
 
 
-/* Expenses */
 .summary {
     margin: 0 0 14px;
     color: var(--muted);
@@ -502,13 +491,11 @@ dialog::backdrop {
 }
 
 
-/* Dashboard */
 .period-text {
     margin: 4px 0 0;
     color: var(--muted);
 }
 
-/* Summary cards */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -532,7 +519,6 @@ dialog::backdrop {
     font-size: 0.85rem;
 }
 
-/* Charts and alerts*/
 .chart-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -544,7 +530,6 @@ dialog::backdrop {
     margin: 0 0 12px;
 }
 
-/* charts */
 .chart-box {
     position: relative;
     height: 260px;

@@ -27,7 +27,6 @@ const alertsTitleEl = document.getElementById('alerts-title');
 const alertRowsEl = document.getElementById('alert-rows');
 
 
-// ---------- 2. Page state ----------
 
 let distanceChart = null;
 let expensesChart = null;

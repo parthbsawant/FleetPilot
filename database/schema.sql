@@ -1,13 +1,8 @@
--- FLEETPILOT DATABASE SCHEMA
 
--- REMOVE EXISTING TABLES
 
--- Remove existing tables in dependency order.
--- This is destructive: use only for the FleetPilot database.
 
 DROP TABLE IF EXISTS expenses, maintenance, trips, vehicles;
 
--- 1. VEHICLES TABLE
 
 CREATE TABLE vehicles (
 
@@ -26,12 +21,12 @@ CREATE TABLE vehicles (
 
     CONSTRAINT registration_is_clean
         CHECK (
-            registration_number = upper(replace(registration_number, ' ', '')) -- > Checks the number entered by Converting the number entered into UPPER Case & Then Replacing the whitespaces from the number entered --> with no space
+            registration_number = upper(replace(registration_number, ' ', ''))
             AND length(registration_number) BETWEEN 4 AND 15
         ),
 
     CONSTRAINT name_model_not_blank
-        CHECK (length(trim(name_model)) > 0), -- > trim() removes the spaces from start and end
+        CHECK (length(trim(name_model)) > 0),
 
     CONSTRAINT valid_vehicle_type
         CHECK (
@@ -48,7 +43,6 @@ CREATE TABLE vehicles (
 );
 
 
--- 2. TRIPS TABLE
 
 CREATE TABLE trips (
 
@@ -69,7 +63,7 @@ CREATE TABLE trips (
     end_odometer_km INTEGER,
 
     distance_km INTEGER GENERATED ALWAYS AS
-        (end_odometer_km - start_odometer_km) STORED, -- > used generated column
+        (end_odometer_km - start_odometer_km) STORED,
 
     notes TEXT,
 
@@ -117,7 +111,6 @@ CREATE TABLE trips (
 
 );
 
--- TRIPS INDEXES
 
 CREATE UNIQUE INDEX one_in_progress_trip_per_vehicle
     ON trips (vehicle_id)
@@ -130,7 +123,6 @@ CREATE INDEX trips_end_at_idx
     ON trips (end_at);
 
 
--- 3. MAINTENANCE TABLE
 
 CREATE TABLE maintenance (
 
@@ -165,14 +157,11 @@ CREATE TABLE maintenance (
 
 );
 
--- MAINTENANCE INDEXES
 
--- Improve searches based on vehicle ID.
 
 CREATE INDEX maintenance_vehicle_id_idx
     ON maintenance (vehicle_id);
 
--- 4. EXPENSES TABLE
 
 CREATE TABLE expenses (
 
@@ -217,15 +206,12 @@ CREATE TABLE expenses (
 
 );
 
--- EXPENSES INDEXES
 
--- Improve searches based on vehicle ID.
 
 CREATE INDEX expenses_vehicle_id_idx
     ON expenses (vehicle_id);
 
 
--- Improve searches based on expense date.
 
 CREATE INDEX expenses_expense_date_idx
     ON expenses (expense_date);

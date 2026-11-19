@@ -1,7 +1,3 @@
-// The Maintenance page: service alerts at the top, service history below,
-// and add / edit / delete for maintenance records.
-// Same structure as vehicles.js, with one extra section for the alerts.
-
 import { api } from './api.js';
 
 import {
@@ -11,8 +7,6 @@ import {
     escapeHtml
 } from './format.js';
 
-
-// ---------- 1. Find the elements we work with ----------
 
 const noticeEl = document.getElementById('notice');
 
@@ -36,18 +30,14 @@ const dialogTitle = document.getElementById('dialog-title');
 const formErrorEl = document.getElementById('form-error');
 const saveButton = document.getElementById('save-button');
 
-
-// ---------- 2. Page state: everything that can change ----------
-
 const PAGE_SIZE = 20;
 
 let currentPage = 1;
-let recordsOnPage = [];   // the maintenance records currently shown
-let allAlerts = [];       // every vehicle's alert, from the last load
-let editingId = null;     // null = adding; a number = editing that record
+let recordsOnPage = [];   
+let allAlerts = [];       
+let editingId = null;    
 
 
-// ---------- 3. Messages above the page ----------
 
 function showNotice(message, kind) {
     noticeEl.textContent = message;
@@ -59,7 +49,6 @@ function hideNotice() {
 }
 
 
-// ---------- 4. Vehicle choices for the filter and the form ----------
 
 async function loadVehicleOptions() {
     try {
@@ -79,9 +68,7 @@ async function loadVehicleOptions() {
 }
 
 
-// ---------- 5. Service alerts ----------
 
-// -4 -> "4 days ago", 0 -> "today", 9 -> "in 9 days"
 function daysText(days) {
     if (days === null) return '';
     if (days === 0) return 'today';
@@ -89,7 +76,6 @@ function daysText(days) {
     return `in ${days} day${days === 1 ? '' : 's'}`;
 }
 
-// 600 -> "600 km left", -300 -> "300 km over"
 function kmText(km) {
     if (km === null) return '—';
     return km > 0 ? `${formatKm(km)} left` : `${formatKm(-km)} over`;
@@ -114,7 +100,6 @@ function alertRowHtml(alert) {
     `;
 }
 
-// Shows the alerts we already have, filtered by the checkbox (no new request)
 function renderAlerts() {
     const shown = alertsOnlyEl.checked
         ? allAlerts.filter((a) => a.state === 'overdue' || a.state === 'due_soon')

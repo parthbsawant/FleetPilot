@@ -1,6 +1,4 @@
 
-// The landing page: fills the "Your fleet" card with live numbers.
-// It reuses the dashboard route, asking for the last 12 months.
 
 import { api } from './api.js';
 import { formatKm, formatMoney } from './format.js';
@@ -18,7 +16,6 @@ async function loadStats() {
         document.getElementById('stat-cost').textContent =
             cost_per_km === null ? '—' : formatMoney(cost_per_km);
     } catch (err) {
-        // The page still works without the numbers, so just say so quietly
         document.getElementById('stat-note').textContent = 'Live numbers are not available right now.';
     }
 }
