@@ -96,3 +96,11 @@ export const CATEGORY_LABELS = {
     insurance_permits: 'Insurance & permits',
     other: 'Other'
 };
+
+
+// ---------- Dashboard ----------
+export function formatMonth(text) {
+    const [year, month] = text.split('-');
+
+    return `${MONTHS[Number(month) - 1]} ${year}`;
+}
