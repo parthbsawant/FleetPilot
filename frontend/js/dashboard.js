@@ -1,9 +1,4 @@
 
-// The Dashboard page: summary cards, three charts and the service alerts.
-// One request (GET /api/dashboard?months=6) brings every number;
-// the alerts reuse the maintenance alerts route.
-// Chart is a global from the Chart.js <script> tag in index.html.
-
 import { api } from './api.js';
 
 import {
@@ -15,9 +10,6 @@ import {
     ALERT_LABELS,
     escapeHtml
 } from './format.js';
-
-
-// ---------- 1. Find the elements we work with ----------
 
 const periodEl = document.getElementById('period');
 const periodTextEl = document.getElementById('period-text');
@@ -37,19 +29,13 @@ const alertRowsEl = document.getElementById('alert-rows');
 
 // ---------- 2. Page state ----------
 
-// The three charts currently drawn. We keep them so we can remove
-// (destroy) the old chart before drawing a new one for another period.
 let distanceChart = null;
 let expensesChart = null;
 let categoryChart = null;
 
-// Brand colours (the same as in app.css)
 const ORANGE = '#FF7138';
 const TEAL = '#37A59A';
 const CATEGORY_COLOURS = ['#FF7138', '#37A59A', '#202833', '#E8B53A', '#9CA3AF'];
-
-
-// ---------- 3. Messages above the page ----------
 
 function showNotice(message, kind) {
     noticeEl.textContent = message;
@@ -60,9 +46,6 @@ function hideNotice() {
     noticeEl.className = 'notice hidden';
 }
 
-
-// ---------- 4. The four summary cards ----------
-
 const numberFormat = new Intl.NumberFormat('en-IN');
 
 function showCards(data) {
@@ -70,7 +53,6 @@ function showCards(data) {
 
     periodTextEl.textContent = `${formatDate(period.start_date)} – ${formatDate(period.end_date)}`;
 
-    // Fleet = active + in maintenance; inactive is shown separately (D-07)
     fleetEl.textContent = fleet.total;
     fleetSubEl.textContent =
         `${fleet.active} active · ${fleet.in_maintenance} in maintenance · ${fleet.inactive} inactive (not counted)`;
@@ -83,20 +65,17 @@ function showCards(data) {
         ? `Largest: ${CATEGORY_LABELS[expenses.by_category[0].category]}`
         : 'No expenses in this period';
 
-    // null means "no distance driven", so there is nothing to divide by
     costEl.textContent = cost_per_km === null ? '—' : formatMoney(cost_per_km);
 }
 
 
-// ---------- 5. The charts ----------
-
 function drawCharts(data) {
-    // Remove the old charts first, or Chart.js would draw on top of them
+   
     if (distanceChart) distanceChart.destroy();
     if (expensesChart) expensesChart.destroy();
     if (categoryChart) categoryChart.destroy();
 
-    // "2026-06" -> "Jun 2026" for the x-axis
+    
     const monthLabels = data.monthly.map((m) => formatMonth(m.month));
 
     distanceChart = new Chart(document.getElementById('distance-chart'), {
@@ -121,7 +100,6 @@ function drawCharts(data) {
             labels: monthLabels,
             datasets: [{
                 label: 'Expenses (₹)',
-                // amounts arrive as text like "308984.99" -> make them numbers
                 data: data.monthly.map((m) => Number(m.expenses)),
                 backgroundColor: TEAL
             }]
@@ -148,9 +126,6 @@ function drawCharts(data) {
     });
 }
 
-
-// ---------- 6. Service alerts (not affected by the period) ----------
-
 function nextServiceText(alert) {
     const parts = [];
 
@@ -172,7 +147,6 @@ async function loadAlerts() {
         const { overdue, due_soon } = result.meta;
         alertsTitleEl.textContent = `Service alerts: ${overdue} overdue, ${due_soon} due soon`;
 
-        // Only the vehicles that need attention
         const urgent = result.data.filter((a) => a.state === 'overdue' || a.state === 'due_soon');
 
         if (urgent.length === 0) {
@@ -197,8 +171,6 @@ async function loadAlerts() {
 }
 
 
-// ---------- 7. Load the dashboard for the chosen period ----------
-
 async function loadDashboard() {
     hideNotice();
 
@@ -212,11 +184,8 @@ async function loadDashboard() {
     }
 }
 
-// A new period -> load the numbers and charts again
 periodEl.addEventListener('change', loadDashboard);
 
-
-// ---------- 8. Start ----------
 
 loadDashboard();
 loadAlerts();

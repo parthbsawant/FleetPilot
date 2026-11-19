@@ -149,7 +149,6 @@ async function loadAlerts() {
 alertsOnlyEl.addEventListener('change', renderAlerts);
 
 
-// ---------- 6. Load and show the service history ----------
 
 function showMessageRow(text) {
     rowsEl.innerHTML = `
@@ -160,7 +159,6 @@ function showMessageRow(text) {
 }
 
 function rowHtml(record) {
-    // Next service: a date, a reading, both, or neither
     const nextParts = [];
     if (record.next_service_date) nextParts.push(formatDate(record.next_service_date));
     if (record.next_service_odometer_km !== null) nextParts.push(formatKm(record.next_service_odometer_km));
@@ -223,9 +221,6 @@ async function loadRecords() {
     }
 }
 
-
-// ---------- 7. Filters, search and paging ----------
-
 for (const filterEl of [vehicleFilterEl, fromFilterEl, toFilterEl]) {
     filterEl.addEventListener('change', () => {
         currentPage = 1;
@@ -254,10 +249,6 @@ nextButton.addEventListener('click', () => {
     loadRecords();
 });
 
-
-// ---------- 8. The add / edit form ----------
-
-// One message box at the top of the form (no per-field errors in this simple version)
 function hideFormError() {
     formErrorEl.className = 'notice notice-error hidden';
 }
@@ -267,7 +258,6 @@ function showFormError(message) {
     formErrorEl.className = 'notice notice-error';
 }
 
-// Today in India as YYYY-MM-DD, the default date for a new service
 function todayText() {
     return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
 }
@@ -317,18 +307,13 @@ form.addEventListener('submit', async (event) => {
 
         dialog.close();
 
-        // A new or changed service can change the alerts too
         await Promise.all([loadRecords(), loadAlerts()]);
     } catch (err) {
-        // e.g. "The next service date must be after the service date"
         showFormError(err.message);
     } finally {
         saveButton.disabled = false;
     }
 });
-
-
-// ---------- 9. Edit and delete buttons in the history table ----------
 
 rowsEl.addEventListener('click', async (event) => {
     const button = event.target.closest('button[data-action]');
@@ -356,8 +341,6 @@ rowsEl.addEventListener('click', async (event) => {
     }
 });
 
-
-// ---------- 10. Start ----------
 
 hideNotice();
 loadVehicleOptions();

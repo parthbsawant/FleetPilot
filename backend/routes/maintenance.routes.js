@@ -1,21 +1,10 @@
 
-// The maintenance routes. Each route: read the request -> run SQL -> send the answer.
-// Same idea as trips.routes.js: no separate validation file. The CHECK rules in
-// schema.sql refuse bad records, and errors.js turns refusals into messages.
-// One extra route, /alerts, tells which vehicles need a service soon.
-
 import { Router } from 'express';
 import { pool } from '../db/pool.js';
 import { createError } from '../middleware/errors.js';
 
 export const maintenanceRouter = Router();
 
-
-// ---------- Small helpers ----------
-
-// The columns every maintenance answer contains.
-// The JOIN brings the vehicle's registration number along with each record.
-// DATE columns already come back as text like "2026-11-18" (set up in pool.js).
 const MAINTENANCE_COLUMNS = `
     m.id,
     m.vehicle_id,
@@ -28,7 +17,6 @@ const MAINTENANCE_COLUMNS = `
     m.next_service_odometer_km
 `;
 
-// An empty form field arrives as '' -> store it as NULL (no value)
 function emptyToNull(value) {
     if (value === undefined || value === null) return null;
 
@@ -37,7 +25,6 @@ function emptyToNull(value) {
     return text === '' ? null : text;
 }
 
-// The 7 values for INSERT and UPDATE, in the same order as the columns
 function maintenanceValues(body) {
     return [
         emptyToNull(body.vehicle_id),
@@ -50,7 +37,6 @@ function maintenanceValues(body) {
     ];
 }
 
-// One record by id, or a 404 error
 async function getMaintenance(id) {
     const result = await pool.query(
         `SELECT ${MAINTENANCE_COLUMNS}
@@ -67,8 +53,6 @@ async function getMaintenance(id) {
     return result.rows[0];
 }
 
-// Decides a vehicle's alert from days left and km left (decision D-05).
-// Either one can be null when the last service didn't set it.
 function alertState(daysLeft, kmLeft) {
     if (daysLeft === null && kmLeft === null) {
         return 'no_schedule';
@@ -86,14 +70,7 @@ function alertState(daysLeft, kmLeft) {
 }
 
 
-// ---------- GET /api/maintenance/alerts ----------
-// Must come BEFORE '/:id', or Express would treat "alerts" as an id.
-
 maintenanceRouter.get('/alerts', async (req, res) => {
-    // For every vehicle that is not inactive:
-    //   - its newest service record (the subquery inside the LEFT JOIN)
-    //   - days_left: next service date minus today in India (DATE - DATE = days)
-    //   - current_odometer_km: the same calculation as the vehicles list
     const result = await pool.query(`
         SELECT
             v.id AS vehicle_id,
@@ -121,7 +98,6 @@ maintenanceRouter.get('/alerts', async (req, res) => {
         ORDER BY v.registration_number
     `);
 
-    // Add km_left and the alert state to every row
     const alerts = result.rows.map((row) => {
         const kmLeft = row.next_service_odometer_km === null
             ? null
@@ -143,8 +119,6 @@ maintenanceRouter.get('/alerts', async (req, res) => {
     });
 });
 
-
-// ---------- GET /api/maintenance?vehicle_id=3&from=...&to=...&search=tyre&page=1 ----------
 
 maintenanceRouter.get('/', async (req, res) => {
     const page = Number(req.query.page) || 1;
@@ -183,7 +157,6 @@ maintenanceRouter.get('/', async (req, res) => {
         ? `WHERE ${conditions.join(' AND ')}`
         : '';
 
-    // Query 1: how many records match (for the pager)
     const countResult = await pool.query(
         `SELECT COUNT(*)::int AS total
          FROM maintenance m
@@ -192,7 +165,6 @@ maintenanceRouter.get('/', async (req, res) => {
         values
     );
 
-    // Query 2: one page of records, newest first
     const rowsResult = await pool.query(
         `SELECT ${MAINTENANCE_COLUMNS}
          FROM maintenance m
@@ -213,17 +185,11 @@ maintenanceRouter.get('/', async (req, res) => {
     });
 });
 
-
-// ---------- GET /api/maintenance/4 ----------
-
 maintenanceRouter.get('/:id', async (req, res) => {
     const record = await getMaintenance(req.params.id);
 
     res.json({ data: record });
 });
-
-
-// ---------- POST /api/maintenance ----------
 
 maintenanceRouter.post('/', async (req, res) => {
     const result = await pool.query(
@@ -239,10 +205,6 @@ maintenanceRouter.post('/', async (req, res) => {
 
     res.status(201).json({ data: record });
 });
-
-
-// ---------- PATCH /api/maintenance/4 ----------
-// The form always sends every field, so we simply update every column.
 
 maintenanceRouter.patch('/:id', async (req, res) => {
     const result = await pool.query(
@@ -268,9 +230,6 @@ maintenanceRouter.patch('/:id', async (req, res) => {
 
     res.json({ data: record });
 });
-
-
-// ---------- DELETE /api/maintenance/4 ----------
 
 maintenanceRouter.delete('/:id', async (req, res) => {
     const result = await pool.query(

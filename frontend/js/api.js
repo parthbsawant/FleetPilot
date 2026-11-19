@@ -1,8 +1,4 @@
 
-// One function every page uses to talk to the FleetPilot API.
-// It sends JSON, reads JSON, and turns { error } responses into thrown errors,
-// so pages can use a normal try/catch.
-
 export async function api(path, { method = 'GET', body } = {}) {
     let response;
 
@@ -17,7 +13,6 @@ export async function api(path, { method = 'GET', body } = {}) {
                 : JSON.stringify(body),
         });
     } catch {
-        // fetch itself only fails when the server can't be reached at all
         throw new Error('Cannot reach the server. Is it running?');
     }
 
@@ -35,5 +30,5 @@ export async function api(path, { method = 'GET', body } = {}) {
         throw error;
     }
 
-    return result; // { data, meta }
+    return result; 
 }

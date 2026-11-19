@@ -1,5 +1,4 @@
 
-// Turns raw API values into what people should read.
 
 const numberFormat = new Intl.NumberFormat('en-IN');
 
@@ -8,14 +7,13 @@ const MONTHS = [
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
 
-// 57119 -> "57,119 km"
+
 export function formatKm(km) {
     return km === null || km === undefined
         ? '—'
         : `${numberFormat.format(km)} km`;
 }
 
-// "2021-06-15" -> "15 Jun 2021"
 export function formatDate(text) {
     if (!text) return '—';
 
@@ -38,7 +36,6 @@ export const STATUS_LABELS = {
     inactive: 'Inactive'
 };
 
-// Makes text safe to put inside HTML.
 export function escapeHtml(value) {
     return String(value ?? '')
         .replaceAll('&', '&amp;')
@@ -48,9 +45,8 @@ export function escapeHtml(value) {
         .replaceAll("'", '&#39;');
 }
 
-// ---------- Trips ----------
 
-// "2026-11-14T06:30" -> "14 Nov 2026, 06:30"
+
 export function formatDateTime(text) {
     if (!text) return '—';
 
@@ -66,7 +62,6 @@ export const TRIP_STATUS_LABELS = {
     cancelled: 'Cancelled'
 };
 
-// ---------- Maintenance ----------
 
 export const ALERT_LABELS = {
     overdue: 'Overdue',
@@ -75,14 +70,12 @@ export const ALERT_LABELS = {
     no_schedule: 'No schedule'
 };
 
-// ---------- Money and expenses ----------
 
 const moneyFormat = new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR'
 });
 
-// "8624.50" (text from the API) or 8624.5 -> "₹8,624.50"
 export function formatMoney(amount) {
     return amount === null || amount === undefined
         ? '—'
@@ -97,8 +90,6 @@ export const CATEGORY_LABELS = {
     other: 'Other'
 };
 
-
-// ---------- Dashboard ----------
 export function formatMonth(text) {
     const [year, month] = text.split('-');
 

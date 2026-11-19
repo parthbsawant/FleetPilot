@@ -158,22 +158,16 @@ async function loadVehicles() {
     }
 }
 
-
-// ---------- 5. Filters, search and paging ----------
-
-// Status filter
 statusFilterEl.addEventListener('change', () => {
     currentPage = 1;
     loadVehicles();
 });
 
-// Vehicle type filter
 typeFilterEl.addEventListener('change', () => {
     currentPage = 1;
     loadVehicles();
 });
 
-// Search with 300 ms debounce
 let searchTimer;
 
 searchEl.addEventListener('input', () => {
@@ -185,19 +179,16 @@ searchEl.addEventListener('input', () => {
     }, 300);
 });
 
-// Previous page
 prevButton.addEventListener('click', () => {
     currentPage -= 1;
     loadVehicles();
 });
 
-// Next page
 nextButton.addEventListener('click', () => {
     currentPage += 1;
     loadVehicles();
 });
 
-// ---------- 6. The add / edit form ----------
 function clearFormErrors() {
     form.querySelectorAll('[data-error-for]').forEach((el) => { el.textContent = ''; });
     form.querySelectorAll('.invalid').forEach((el) => el.classList.remove('invalid'));
@@ -219,7 +210,6 @@ function openForm(vehicle) {
     dialogTitle.textContent = vehicle ? `Edit ${vehicle.registration_number}` : 'Add vehicle';
 
     if (vehicle) {
-        // Pre-fill every field from the vehicle
         form.elements.registration_number.value = vehicle.registration_number;
         form.elements.name_model.value = vehicle.name_model;
         form.elements.vehicle_type.value = vehicle.vehicle_type;
@@ -235,10 +225,8 @@ document.getElementById('add-button').addEventListener('click', () => openForm(n
 document.getElementById('cancel-button').addEventListener('click', () => dialog.close());
 
 form.addEventListener('submit', async (event) => {
-    event.preventDefault(); // stop the browser's own page reload
+    event.preventDefault(); 
     clearFormErrors();
-
-    // Read the form into a plain object: { registration_number: '...', ... }
     const values = Object.fromEntries(new FormData(form));
 
     saveButton.disabled = true;
@@ -261,9 +249,6 @@ form.addEventListener('submit', async (event) => {
     }
 });
 
-
-// ---------- 7. Edit and delete buttons in the table ----------
-// One listener on the whole table body handles every row's buttons
 rowsEl.addEventListener('click', async (event) => {
     const button = event.target.closest('button[data-action]');
     if (!button) return;
@@ -289,6 +274,5 @@ rowsEl.addEventListener('click', async (event) => {
     }
 });
 
-// ---------- 8. Start ----------
 hideNotice();
 loadVehicles();

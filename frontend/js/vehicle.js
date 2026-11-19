@@ -15,31 +15,19 @@ import {
 } from './format.js';
 
 
-// ---------- 1. Find the elements we work with ----------
-
 const titleEl = document.getElementById('vehicle-title');
 const noticeEl = document.getElementById('notice');
 const detailsEl = document.getElementById('details');
 
-
-// ---------- 2. Read the id from the address ----------
-
-// location.search is the "?id=3" part of the address
 const params = new URLSearchParams(location.search);
 const vehicleId = params.get('id');
 
-
-// ---------- 3. Messages above the page ----------
 
 function showNotice(message, kind) {
     noticeEl.textContent = message;
     noticeEl.className = `notice notice-${kind}`;
 }
 
-
-// ---------- 4. Show the details ----------
-
-// One label + value pair inside the details card
 function detailHtml(label, value) {
     return `
         <div>
@@ -69,9 +57,6 @@ function showVehicle(vehicle) {
     ].join('');
 }
 
-
-// ---------- 5. Load the vehicle ----------
-
 async function loadVehicle() {
     if (!vehicleId) {
         showNotice('No vehicle chosen. Go back and pick one from the list.', 'error');
@@ -89,8 +74,6 @@ async function loadVehicle() {
     }
 }
 
-
-// ---------- 6. This vehicle's recent trips ----------
 
 const tripRowsEl = document.getElementById('trip-rows');
 
@@ -128,13 +111,9 @@ async function loadRecentTrips() {
     }
 }
 
-
-// ---------- 7. This vehicle's recent services ----------
-
 const serviceRowsEl = document.getElementById('service-rows');
 
 function serviceRowHtml(record) {
-    // Next service: a date, a reading, both, or neither
     const nextParts = [];
     if (record.next_service_date) nextParts.push(formatDate(record.next_service_date));
     if (record.next_service_odometer_km !== null) nextParts.push(formatKm(record.next_service_odometer_km));
@@ -151,7 +130,6 @@ function serviceRowHtml(record) {
 
 async function loadRecentServices() {
     try {
-        // The normal maintenance list, filtered to this vehicle, newest 5
         const result = await api(`/maintenance?vehicle_id=${vehicleId}&limit=5`);
 
         if (result.data.length === 0) {
@@ -169,8 +147,6 @@ async function loadRecentServices() {
 }
 
 
-// ---------- 8. This vehicle's recent expenses ----------
-
 const expenseRowsEl = document.getElementById('expense-rows');
 const expensesTitleEl = document.getElementById('expenses-title');
 
@@ -187,10 +163,8 @@ function expenseRowHtml(expense) {
 
 async function loadRecentExpenses() {
     try {
-        // The normal expenses list, filtered to this vehicle, newest 5
         const result = await api(`/expenses?vehicle_id=${vehicleId}&limit=5`);
 
-        // The total covers ALL of this vehicle's expenses, not just these 5
         expensesTitleEl.textContent = `Recent expenses (total ${formatMoney(result.meta.total_amount)})`;
 
         if (result.data.length === 0) {
@@ -206,9 +180,6 @@ async function loadRecentExpenses() {
         `;
     }
 }
-
-
-// ---------- 9. Start ----------
 
 loadVehicle();
 loadRecentTrips();

@@ -1,20 +1,9 @@
-
-// The trips routes. Each route: read the request -> run SQL -> send the answer.
-// There is no separate validation file: the CHECK rules in schema.sql refuse
-// bad trips, and errors.js turns those refusals into readable messages.
-
 import { Router } from 'express';
 import { pool } from '../db/pool.js';
 import { createError } from '../middleware/errors.js';
 
 export const tripsRouter = Router();
 
-
-// ---------- Small helpers ----------
-
-// The columns every trip answer contains.
-// Times are turned into India time text, like "2026-11-18T09:30".
-// The JOIN brings the vehicle's registration number along with each trip.
 const TRIP_COLUMNS = `
     t.id,
     t.vehicle_id,
@@ -30,7 +19,6 @@ const TRIP_COLUMNS = `
     t.notes
 `;
 
-// An empty form field arrives as '' -> store it as NULL (no value)
 function emptyToNull(value) {
     if (value === undefined || value === null) return null;
 
@@ -39,14 +27,12 @@ function emptyToNull(value) {
     return text === '' ? null : text;
 }
 
-// "2026-11-18T09:30" (India time from the form) -> "2026-11-18T09:30+05:30"
 function toIndiaTime(value) {
     const text = emptyToNull(value);
 
     return text === null ? null : `${text}+05:30`;
 }
 
-// The 9 values for INSERT and UPDATE, in the same order as the columns
 function tripValues(body) {
     return [
         emptyToNull(body.vehicle_id),
@@ -61,7 +47,6 @@ function tripValues(body) {
     ];
 }
 
-// One trip by id, or a 404 error
 async function getTrip(id) {
     const result = await pool.query(
         `SELECT ${TRIP_COLUMNS}
@@ -78,15 +63,11 @@ async function getTrip(id) {
     return result.rows[0];
 }
 
-
-// ---------- GET /api/trips?vehicle_id=3&status=completed&from=...&to=...&search=pune&page=1 ----------
-
 tripsRouter.get('/', async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Math.min(Number(req.query.limit) || 20, 100);
     const offset = (page - 1) * limit;
 
-    // Build the WHERE from the filters that were sent (same idea as vehicles)
     const conditions = [];
     const values = [];
 
@@ -100,7 +81,6 @@ tripsRouter.get('/', async (req, res) => {
         conditions.push(`t.status = $${values.length}`);
     }
 
-    // Dates are compared as India dates: "started on or after this day"
     if (req.query.from) {
         values.push(req.query.from);
         conditions.push(`(t.start_at AT TIME ZONE 'Asia/Kolkata')::date >= $${values.length}`);
@@ -124,7 +104,6 @@ tripsRouter.get('/', async (req, res) => {
         ? `WHERE ${conditions.join(' AND ')}`
         : '';
 
-    // Query 1: how many trips match (for the pager)
     const countResult = await pool.query(
         `SELECT COUNT(*)::int AS total
          FROM trips t
@@ -133,7 +112,6 @@ tripsRouter.get('/', async (req, res) => {
         values
     );
 
-    // Query 2: one page of trips, newest first
     const rowsResult = await pool.query(
         `SELECT ${TRIP_COLUMNS}
          FROM trips t
@@ -155,7 +133,6 @@ tripsRouter.get('/', async (req, res) => {
 });
 
 
-// ---------- GET /api/trips/42 ----------
 
 tripsRouter.get('/:id', async (req, res) => {
     const trip = await getTrip(req.params.id);
@@ -163,8 +140,6 @@ tripsRouter.get('/:id', async (req, res) => {
     res.json({ data: trip });
 });
 
-
-// ---------- POST /api/trips ----------
 
 tripsRouter.post('/', async (req, res) => {
     const result = await pool.query(
@@ -176,15 +151,11 @@ tripsRouter.post('/', async (req, res) => {
         tripValues(req.body)
     );
 
-    // Read it back with the registration number and India times
     const trip = await getTrip(result.rows[0].id);
 
     res.status(201).json({ data: trip });
 });
 
-
-// ---------- PATCH /api/trips/42 ----------
-// The form always sends every field, so we simply update every column.
 
 tripsRouter.patch('/:id', async (req, res) => {
     const result = await pool.query(
@@ -213,9 +184,6 @@ tripsRouter.patch('/:id', async (req, res) => {
     res.json({ data: trip });
 });
 
-
-// ---------- DELETE /api/trips/42 ----------
-// Completed trips are history, so the WHERE never deletes them.
 
 tripsRouter.delete('/:id', async (req, res) => {
     const result = await pool.query(

@@ -1,6 +1,3 @@
-// The Trips page: load the list, filter it, and add / edit / delete trips.
-// Same structure as vehicles.js, section by section.
-
 import { api } from './api.js';
 
 import {
@@ -10,8 +7,6 @@ import {
     escapeHtml
 } from './format.js';
 
-
-// ---------- 1. Find the elements we work with ----------
 
 const rowsEl = document.getElementById('trip-rows');
 const noticeEl = document.getElementById('notice');
@@ -33,16 +28,11 @@ const formErrorEl = document.getElementById('form-error');
 const saveButton = document.getElementById('save-button');
 
 
-// ---------- 2. Page state: everything that can change ----------
-
 const PAGE_SIZE = 20;
 
 let currentPage = 1;
-let tripsOnPage = [];   // the trips currently shown
-let editingId = null;   // null = adding; a number = editing that trip
-
-
-// ---------- 3. Messages above the table ----------
+let tripsOnPage = [];   
+let editingId = null;   
 
 function showNotice(message, kind) {
     noticeEl.textContent = message;
@@ -52,9 +42,6 @@ function showNotice(message, kind) {
 function hideNotice() {
     noticeEl.className = 'notice hidden';
 }
-
-
-// ---------- 4. Vehicle choices for the filter and the form ----------
 
 async function loadVehicleOptions() {
     try {
@@ -73,9 +60,6 @@ async function loadVehicleOptions() {
     }
 }
 
-
-// ---------- 5. Load and show the list ----------
-
 function showMessageRow(text) {
     rowsEl.innerHTML = `
         <tr>
@@ -86,7 +70,6 @@ function showMessageRow(text) {
 
 const numberFormat = new Intl.NumberFormat('en-IN');
 
-// Distance with the readings under it, e.g. "127 km" / "40,663 → 40,790"
 function distanceHtml(trip) {
     if (trip.distance_km !== null) {
         return `
@@ -103,7 +86,7 @@ function distanceHtml(trip) {
 }
 
 function rowHtml(trip) {
-    // Completed trips are history: they can be edited, not deleted
+    
     const deleteButton = trip.status === 'completed'
         ? ''
         : `<button class="btn btn-small btn-danger" data-action="delete" data-id="${trip.id}">Delete</button>`;
@@ -168,10 +151,6 @@ async function loadTrips() {
     }
 }
 
-
-// ---------- 6. Filters, search and paging ----------
-
-// Every dropdown and date filter works the same way: back to page 1, reload
 for (const filterEl of [vehicleFilterEl, statusFilterEl, fromFilterEl, toFilterEl]) {
     filterEl.addEventListener('change', () => {
         currentPage = 1;
@@ -179,7 +158,6 @@ for (const filterEl of [vehicleFilterEl, statusFilterEl, fromFilterEl, toFilterE
     });
 }
 
-// Search waits until typing pauses for 300 ms
 let searchTimer;
 
 searchEl.addEventListener('input', () => {
@@ -201,10 +179,6 @@ nextButton.addEventListener('click', () => {
     loadTrips();
 });
 
-
-// ---------- 7. The add / edit form ----------
-
-// One message box at the top of the form (no per-field errors in this simple version)
 function hideFormError() {
     formErrorEl.className = 'notice notice-error hidden';
 }
@@ -222,8 +196,6 @@ function openForm(trip) {
     dialogTitle.textContent = trip ? `Edit trip #${trip.id}` : 'Add trip';
 
     if (trip) {
-        // Pre-fill every field. The API sends times as "YYYY-MM-DDTHH:mm",
-        // exactly the text a datetime-local input expects.
         form.elements.vehicle_id.value = trip.vehicle_id;
         form.elements.status.value = trip.status;
         form.elements.origin.value = trip.origin;
@@ -262,15 +234,11 @@ form.addEventListener('submit', async (event) => {
         dialog.close();
         await loadTrips();
     } catch (err) {
-        // e.g. "A completed trip needs both readings and an end time"
         showFormError(err.message);
     } finally {
         saveButton.disabled = false;
     }
 });
-
-
-// ---------- 8. Edit and delete buttons in the table ----------
 
 rowsEl.addEventListener('click', async (event) => {
     const button = event.target.closest('button[data-action]');
@@ -297,9 +265,6 @@ rowsEl.addEventListener('click', async (event) => {
         }
     }
 });
-
-
-// ---------- 9. Start ----------
 
 hideNotice();
 loadVehicleOptions();

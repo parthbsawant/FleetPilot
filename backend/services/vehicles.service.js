@@ -1,12 +1,6 @@
-
-// Everything FleetPilot does with vehicles in the database.
-// Routes call these functions; only this file writes SQL about vehicles.
-
 import { pool } from '../db/pool.js';
 import { createError } from '../middleware/errors.js';
 
-// The columns every vehicle response contains, including the CALCULATED
-// current odometer: the highest known reading (decision D-01).
 const VEHICLE_COLUMNS = `
   v.id,
   v.registration_number,
@@ -26,7 +20,6 @@ const VEHICLE_COLUMNS = `
   v.updated_at
 `;
 
-// List vehicles, with optional filters and pages.
 export async function listVehicles({ filters, page, limit }) {
   const conditions = [];
   const values = [];
@@ -48,7 +41,6 @@ export async function listVehicles({ filters, page, limit }) {
 
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
-  // How many vehicles match in total (for "page 1 of 3")
   const countResult = await pool.query(
     `SELECT COUNT(*)::int AS total FROM vehicles v ${where}`,
     values
@@ -56,7 +48,6 @@ export async function listVehicles({ filters, page, limit }) {
 
   const total = countResult.rows[0].total;
 
-  // One page of them
   const offset = (page - 1) * limit;
 
   const rowsResult = await pool.query(
@@ -71,7 +62,6 @@ export async function listVehicles({ filters, page, limit }) {
   return { vehicles: rowsResult.rows, total };
 }
 
-// One vehicle by id, or a 404 error.
 export async function getVehicle(id) {
   const result = await pool.query(
     `SELECT ${VEHICLE_COLUMNS} FROM vehicles v WHERE v.id = $1`,
@@ -85,7 +75,6 @@ export async function getVehicle(id) {
   return result.rows[0];
 }
 
-// Convert duplicate registration errors into a clear 409 response.
 function explainDatabaseError(err, values) {
     if (
         err.code === '23505' &&
@@ -104,7 +93,6 @@ function explainDatabaseError(err, values) {
     return err;
 }
 
-// Columns that the application is allowed to insert or update.
 const EDITABLE_COLUMNS = [
     'registration_number',
     'name_model',
@@ -114,7 +102,6 @@ const EDITABLE_COLUMNS = [
     'acquired_on'
 ];
 
-// Add a new vehicle. The values have already been validated.
 export async function createVehicle(values) {
     const columns = EDITABLE_COLUMNS.filter(
         (column) => values[column] !== undefined
@@ -144,7 +131,6 @@ export async function createVehicle(values) {
     return getVehicle(result.rows[0].id);
 }
 
-// Update selected fields of an existing vehicle.
 export async function updateVehicle(id, values) {
     const columns = EDITABLE_COLUMNS.filter(
         (column) => values[column] !== undefined
@@ -185,7 +171,6 @@ export async function updateVehicle(id, values) {
     return getVehicle(id);
 }
 
-// Delete a vehicle if it has no associated history.
 export async function deleteVehicle(id) {
     let result;
 

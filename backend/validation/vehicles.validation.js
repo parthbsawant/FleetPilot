@@ -14,7 +14,6 @@ export const VEHICLE_STATUSES = [
     'inactive'
 ];
 
-//parser for the req.params and req.query
 export function parseId(text) {
     const id = Number(text);
 
@@ -25,7 +24,6 @@ export function parseId(text) {
     return id;
 }
 
-//helper function for checking the date format & if the date is valid (not exported)
 export function isRealDate(text){
     if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) {
         return false;
@@ -36,7 +34,6 @@ export function isRealDate(text){
     return !Number.isNaN(date.getTime()) && date.toISOString().startsWith(text);
 }
 
-// to check if the date is valid date in INDIA
 export function todayInIndia(){
     return new Intl.DateTimeFormat('en-CA',{
         timeZone : 'Asia/Kolkata'
@@ -50,7 +47,6 @@ export function validateVehicle(body, { isNew }){
 
     const has = (field) => input[field] !== undefined;
 
-    // registration_number check
     if (has('registration_number') || isNew) {
         const reg = String(input.registration_number ?? '')
             .toUpperCase()
@@ -65,7 +61,6 @@ export function validateVehicle(body, { isNew }){
         }
     }
 
-    //vehicle name model check
     if(has('name_model') || isNew){
         const name = String(input.name_model ?? '').trim();
 
@@ -77,7 +72,7 @@ export function validateVehicle(body, { isNew }){
             values.name_model = name;
         }
     }
-    //vehicle type check (should be between the predefined list)
+
     if(has('vehicle_type') || isNew){
         if(!VEHICLE_TYPES.includes(input.vehicle_type)){
             errors.vehicle_type = 'Choose a vehicle type';
@@ -86,7 +81,6 @@ export function validateVehicle(body, { isNew }){
         }
     }
 
-    // status: optional to create and database default = 'active'
     if (has('status')) {
         if (!VEHICLE_STATUSES.includes(input.status)) {
             errors.status = 'Choose a valid status';
@@ -95,7 +89,6 @@ export function validateVehicle(body, { isNew }){
         }
     }
 
-    //check and validate the odometer reading
     if (has('initial_odometer_km') && input.initial_odometer_km !== ''){
         const km = Number(input.initial_odometer_km);
 
@@ -106,7 +99,6 @@ export function validateVehicle(body, { isNew }){
         }
     }
 
-    //check the date of acquiring
     if(has('acquired_on')) {
         const date = input.acquired_on;
 

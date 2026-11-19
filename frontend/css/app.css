@@ -1,7 +1,4 @@
-
-/* FleetPilot shared styles: every page links this one file. */
-
-/* ---------- 1. Design tokens ---------- */
+/* Usable CSS*/
 :root {
     --graphite: #202833;
     --orange: #FF7138;
@@ -25,7 +22,7 @@ body {
     color: var(--graphite);
 }
 
-/* ---------- 2. Main application layout ---------- */
+/* Main application layout */
 .layout {
     display: grid;
     grid-template-columns: 230px 1fr;
@@ -100,7 +97,7 @@ body {
     font-size: 1.6rem;
 }
 
-/* ---------- 3. Common building blocks ---------- */
+/* Common building blocks */
 .card {
     background: var(--white);
     border: 1px solid var(--border);
@@ -174,7 +171,7 @@ select:focus {
     border-color: var(--teal);
 }
 
-/* ---------- 4. Tables ---------- */
+/* Tables */
 .table-wrap {
     overflow-x: auto;
 }
@@ -337,7 +334,7 @@ dialog::backdrop {
     margin-top: 18px;
 }
 
-/* ---------- 7. Responsive layout ---------- */
+/* 7. Responsive layout */
 @media (max-width: 760px) {
     .layout {
         grid-template-columns: 1fr;
@@ -366,7 +363,7 @@ dialog::backdrop {
 }
 
 
-/* ---------- 8. Vehicle detail page ---------- */
+/* 8. Vehicle detail page */
 .back-link {
     display: inline-block;
     margin-bottom: 12px;
@@ -395,7 +392,6 @@ dialog::backdrop {
     font-weight: 600;
 }
 
-/* The registration number in the vehicles table is a link */
 .row-link {
     color: inherit;
     text-decoration: none;
@@ -411,8 +407,7 @@ dialog::backdrop {
     }
 }
 
-/* ---------- 9. Trips ---------- */
-/* Badges never break onto two lines ("In progress") */
+/* Trips  */
 .badge {
     white-space: nowrap;
 }
@@ -437,24 +432,21 @@ dialog::backdrop {
     color: #555B66;
 }
 
-/* Small grey text under a main value, e.g. the odometer range under a distance */
 .muted {
     color: var(--muted);
     font-size: 0.85rem;
 }
 
-/* Keeps short values like dates on one line */
 .nowrap {
     white-space: nowrap;
 }
 
-/* The "Recent trips" card on the vehicle detail page */
 .section-title {
     font-size: 1.1rem;
     margin: 28px 0 12px;
 }
 
-/* ---------- 10. Maintenance ---------- */
+/*10. Maintenance*/
 .badge-overdue {
     background: #FBE4E1;
     color: #A93226;
@@ -475,7 +467,6 @@ dialog::backdrop {
     color: #555B66;
 }
 
-/* A heading row inside a card: title on the left, a control on the right */
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -499,7 +490,7 @@ dialog::backdrop {
 }
 
 
-/* ---------- 11. Expenses ---------- */
+/* Expenses */
 .summary {
     margin: 0 0 14px;
     color: var(--muted);
@@ -511,14 +502,13 @@ dialog::backdrop {
 }
 
 
-/* ---------- 12. Dashboard ---------- */
-/* The date range under the "Dashboard" heading */
+/* Dashboard */
 .period-text {
     margin: 4px 0 0;
     color: var(--muted);
 }
 
-/* Four summary cards in a row (2 on tablets, 1 on phones) */
+/* Summary cards */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -542,7 +532,7 @@ dialog::backdrop {
     font-size: 0.85rem;
 }
 
-/* Charts and alerts: two per row */
+/* Charts and alerts*/
 .chart-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -554,7 +544,7 @@ dialog::backdrop {
     margin: 0 0 12px;
 }
 
-/* Chart.js fills its parent, so the parent decides the height */
+/* charts */
 .chart-box {
     position: relative;
     height: 260px;

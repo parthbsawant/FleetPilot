@@ -9,11 +9,8 @@ import {
 
 import * as vehicles from '../services/vehicles.service.js';
 
-// Create the vehicle router.
 export const vehiclesRouter = Router();
 
-// GET /api/vehicles
-// Get all vehicles with optional filters and pagination.
 vehiclesRouter.get('/', async (req, res) => {
     const { filters, page, limit } = validateVehicleQuery(req.query);
 
@@ -33,8 +30,6 @@ vehiclesRouter.get('/', async (req, res) => {
     });
 });
 
-// GET /api/vehicles/:id
-// Get one vehicle using its ID.
 vehiclesRouter.get('/:id', async (req, res) => {
     const id = parseId(req.params.id);
 
@@ -45,9 +40,6 @@ vehiclesRouter.get('/:id', async (req, res) => {
     });
 });
 
-
-// POST /api/vehicles
-// Create a new vehicle.
 vehiclesRouter.post('/', async (req, res) => {
     const values = validateVehicle(req.body, { isNew: true });
 

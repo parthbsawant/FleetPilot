@@ -1,6 +1,3 @@
-// The Expenses page: load the list and its total, filter it, and add / edit / delete expenses.
-// Same structure as vehicles.js and trips.js, section by section.
-
 import { api } from './api.js';
 
 import {
@@ -10,8 +7,6 @@ import {
     escapeHtml
 } from './format.js';
 
-
-// ---------- 1. Find the elements we work with ----------
 
 const rowsEl = document.getElementById('expense-rows');
 const noticeEl = document.getElementById('notice');
@@ -34,16 +29,12 @@ const formErrorEl = document.getElementById('form-error');
 const saveButton = document.getElementById('save-button');
 
 
-// ---------- 2. Page state: everything that can change ----------
-
 const PAGE_SIZE = 20;
 
 let currentPage = 1;
-let expensesOnPage = [];  // the expenses currently shown
-let editingId = null;     // null = adding; a number = editing that expense
+let expensesOnPage = [];  
+let editingId = null;     
 
-
-// ---------- 3. Messages above the table ----------
 
 function showNotice(message, kind) {
     noticeEl.textContent = message;
@@ -53,9 +44,6 @@ function showNotice(message, kind) {
 function hideNotice() {
     noticeEl.className = 'notice hidden';
 }
-
-
-// ---------- 4. Vehicle choices for the filter and the form ----------
 
 async function loadVehicleOptions() {
     try {
@@ -73,9 +61,6 @@ async function loadVehicleOptions() {
         showNotice(`Could not load vehicles: ${err.message}`, 'error');
     }
 }
-
-
-// ---------- 5. Load and show the list ----------
 
 function showMessageRow(text) {
     rowsEl.innerHTML = `
@@ -122,8 +107,6 @@ async function loadExpenses() {
 
         const { page, limit, total, total_amount } = result.meta;
 
-        // The total is calculated by the database for ALL matching expenses,
-        // not just the 20 on this page
         summaryEl.innerHTML = `Total for these filters: <strong>${formatMoney(total_amount)}</strong>`;
 
         if (expensesOnPage.length === 0) {
@@ -146,8 +129,6 @@ async function loadExpenses() {
     }
 }
 
-
-// ---------- 6. Filters, search and paging ----------
 
 for (const filterEl of [vehicleFilterEl, categoryFilterEl, fromFilterEl, toFilterEl]) {
     filterEl.addEventListener('change', () => {
@@ -178,9 +159,6 @@ nextButton.addEventListener('click', () => {
 });
 
 
-// ---------- 7. The add / edit form ----------
-
-// One message box at the top of the form (no per-field errors in this simple version)
 function hideFormError() {
     formErrorEl.className = 'notice notice-error hidden';
 }
@@ -190,7 +168,6 @@ function showFormError(message) {
     formErrorEl.className = 'notice notice-error';
 }
 
-// Today in India as YYYY-MM-DD, used as the default date for a new expense
 function todayText() {
     return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
 }
@@ -239,15 +216,11 @@ form.addEventListener('submit', async (event) => {
         dialog.close();
         await loadExpenses();
     } catch (err) {
-        // e.g. "The amount must be more than 0 and at most ₹10,00,000"
         showFormError(err.message);
     } finally {
         saveButton.disabled = false;
     }
 });
-
-
-// ---------- 8. Edit and delete buttons in the table ----------
 
 rowsEl.addEventListener('click', async (event) => {
     const button = event.target.closest('button[data-action]');
@@ -275,8 +248,6 @@ rowsEl.addEventListener('click', async (event) => {
     }
 });
 
-
-// ---------- 9. Start ----------
 
 hideNotice();
 loadVehicleOptions();
